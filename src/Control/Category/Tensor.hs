@@ -6,6 +6,8 @@ import Prelude hiding ((.), id)
 import Data.Bifunctor
 import Data.Profunctor
 import Data.Void
+import Data.These
+import Data.These.Combinators
 
 import Control.Category
 import Control.Category.Op
@@ -13,6 +15,7 @@ import Control.Category.Iso
 
 type (×) = (,)
 type (+) = Either
+type (⊠) = These
 
 class (Category (Arrow t)) => Structure t
   where
@@ -25,6 +28,10 @@ instance Structure (×)
 instance Structure (+)
   where
   type Arrow (+) = (->)
+
+instance Structure (⊠)
+  where
+  type Arrow (⊠) = (->)
 
 class Structure t => Associative t
   where
@@ -44,6 +51,10 @@ instance Associative (+)
     f = either (either Left (Right . Left)) (Right . Right)
     b = either (Left . Left) (either (Left . Right) Right)
 
+instance Associative (⊠)
+  where
+  assoc = Iso assocThese unassocThese
+
 class Structure t => Symmetric t
   where
   symm :: Arrow t (x `t` y) (y `t` x)
@@ -55,6 +66,10 @@ instance Symmetric (×)
 instance Symmetric (+)
   where
   symm = either Right Left
+
+instance Symmetric (⊠)
+  where
+  symm = swapThese
 
 class Associative t => Tensor t
   where
@@ -73,6 +88,17 @@ instance Tensor (+)
   type Unit (+) = Void
   lunit = Iso (either absurd id) Right
   runit = Iso (either id absurd) Left
+
+newtype Neither = Neither { unNeither :: Void }
+
+impossible :: Neither -> a
+impossible = absurd . unNeither
+
+instance Tensor (⊠)
+  where
+  type Unit (⊠) = Neither
+  lunit = Iso (these impossible id impossible) That
+  runit = Iso (these id impossible (const impossible)) This
 
 newtype OpT t a b = OpT { unOpT :: t a b }
   deriving Bifunctor

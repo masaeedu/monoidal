@@ -11,6 +11,7 @@ dependencies:
   - { name: "base", version: ">=4.12 && <4.13" }
   - bifunctors
   - profunctors
+  - these
 
 ghc-options: -Wall
 default-extensions:
