@@ -10,7 +10,7 @@ union :: Alt f => f a -> f b -> f (a + b)
 union = curry combineF
 
 empty :: Alternative f => f a
-empty = absurd <$> unitF @(+) @(×) ()
+empty = absurd <$> unitF ()
 
 (<|>) :: Alt f => f a -> f a -> f a
 (<|>) fa fb = either id id <$> fa `union` fb
