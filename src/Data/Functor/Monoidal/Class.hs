@@ -1,6 +1,7 @@
 {-# LANGUAGE ImpredicativeTypes #-}
 module Data.Functor.Monoidal.Class where
 
+import Prelude hiding (Applicative(..))
 import Control.Category.Tensor
 
 import Data.Bifunctor.Tannen
@@ -23,5 +24,6 @@ type Decisive    = Monoidal (OpT (+)) (OpT (+))
 type Alternative = Monoidal (+) (×)
 
 type Select f = (Functor f, forall a. Apply (Tannen f (+) a))
+type Selective f = (Applicative f, Select f)
 
 newtype FromBase f a = FromBase { unFromBase :: f a }

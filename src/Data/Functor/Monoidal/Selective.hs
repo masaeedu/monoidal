@@ -1,6 +1,6 @@
 module Data.Functor.Monoidal.Selective where
 
-import Prelude hiding ((<*>))
+import Prelude hiding ((<*>), Applicative(..))
 import Control.Category.Tensor
 
 import Data.Functor.Monoidal.Class
@@ -18,3 +18,9 @@ extractTannen = fmap (either id id) . runTannen
 
 branch :: Select f => f (a -> r) -> f (b -> r) -> f (a + b) -> f r
 branch fa fb = extractTannen . (liftTannen fa <*>) . flipTannen . (liftTannen fb <*>) . Tannen
+
+select :: Selective f => f (a + b) -> f (a -> b) -> f b
+select v f = branch f (pure id) v
+
+(<*?) :: Selective f => f (a + b) -> f (a -> b) -> f b
+(<*?) = select
