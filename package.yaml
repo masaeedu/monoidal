@@ -9,6 +9,8 @@ build-type: Simple
 source-dirs: src
 dependencies:
 - { name: "base", version: '>=4.12 && <4.13' }
+- bifunctors
+- profunctors
 
 ghc-options: -Wall
 default-extensions:
