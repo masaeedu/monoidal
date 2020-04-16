@@ -17,6 +17,9 @@ type Demux  = Semigroupal (+) (+) (×)
 type Switch = Semigroupal (×) (+) (×)
 type Splice = Semigroupal (+) (×) (×)
 
+type Comux   = Semigroupal (×) (×) (OpT (×))
+type Codemux = Semigroupal (+) (+) (OpT (×))
+
 type Terminal  = Monoidal (×) (×) (×)
 type Initial   = Monoidal (+) (+) (×)
 type Universal = Monoidal (×) (+) (×)
