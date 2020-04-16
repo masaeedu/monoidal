@@ -37,6 +37,9 @@ default-extensions:
 - FlexibleContexts
 - DefaultSignatures
 
+- TypeFamilies
+- TypeFamilyDependencies
+
 library: {}
 executable:
   main: Main.hs
