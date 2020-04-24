@@ -57,6 +57,7 @@ type Alt     = Semigroupal   (+) (×)
 type Filter  = OpSemigroupal (+) (×)
 type Align   = Semigroupal   (⊠) (×)
 type Unalign = OpSemigroupal (⊠) (×)
+type Grid    = Semigroupal   (⊠) (⊠)
 
 type Applicative = Monoidal   (×) (×)
 type Decisive    = OpMonoidal (+) (+)
