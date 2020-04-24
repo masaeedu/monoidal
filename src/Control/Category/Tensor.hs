@@ -105,3 +105,29 @@ instance Tensor (⊠)
   type Unit (⊠) = Void
   lunit = Iso (these absurd id absurd) That
   runit = Iso (these id absurd (const absurd)) This
+
+class (Structure times, Structure plus, Arrow times ~ Arrow plus) => LaxLeftDistributive times plus
+  where
+  ldistrib :: Arrow times (x `times` (y `plus` z)) ((x `times` y) `plus` (x `times` z))
+
+class (Structure times, Structure plus, Arrow times ~ Arrow plus) => LaxRightDistributive times plus
+  where
+  rdistrib :: Arrow times ((x `plus` y) `times` z) ((x `times` z) `plus` (y `times` z))
+
+instance LaxLeftDistributive (×) (+)
+  where
+  ldistrib (x, Left y) = Left (x, y)
+  ldistrib (x, Right y) = Right (x, y)
+
+instance LaxRightDistributive (×) (+)
+  where
+  rdistrib (Left x, y) = Left (x, y)
+  rdistrib (Right x, y) = Right (x, y)
+
+instance LaxLeftDistributive (×) (×)
+  where
+  ldistrib (x, (y, z)) = ((x, y), (x, z))
+
+instance LaxRightDistributive (×) (×)
+  where
+  rdistrib ((x, y), z) = ((x, z), (y, z))
