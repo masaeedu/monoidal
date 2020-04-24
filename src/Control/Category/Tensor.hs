@@ -36,7 +36,7 @@ instance Structure (⊠)
   where
   type Arrow (⊠) = (->)
 
-class Structure t => Associative t
+class (Structure t, Bifunctor t) => Associative t
   where
   assoc :: Iso (Arrow t) ((x `t` y) `t` z) (x `t` (y `t` z))
 
