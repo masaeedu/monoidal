@@ -43,4 +43,6 @@ default-extensions:
   - TypeFamilies
   - TypeFamilyDependencies
 
+  - AllowAmbiguousTypes
+
 library: {}

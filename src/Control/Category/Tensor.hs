@@ -4,13 +4,11 @@ module Control.Category.Tensor where
 import Prelude hiding ((.), id)
 
 import Data.Bifunctor
-import Data.Profunctor
 import Data.Void
 import Data.These
 import Data.These.Combinators
 
 import Control.Category
-import Control.Category.Op
 import Control.Category.Iso
 
 type (×) = (,)
@@ -86,7 +84,7 @@ instance Symmetric (⊠)
 
 class Associative t => Tensor t
   where
-  type Unit t = (r :: *) | r -> t
+  type Unit t :: *
   lunit :: Iso (Arrow t) (t (Unit t) x) x
   runit :: Iso (Arrow t) (t x (Unit t)) x
 
@@ -102,41 +100,8 @@ instance Tensor (+)
   lunit = Iso (either absurd id) Right
   runit = Iso (either id absurd) Left
 
-newtype Neither = Neither { unNeither :: Void }
-
-impossible :: Neither -> a
-impossible = absurd . unNeither
-
 instance Tensor (⊠)
   where
-  type Unit (⊠) = Neither
-  lunit = Iso (these impossible id impossible) That
-  runit = Iso (these id impossible (const impossible)) This
-
-newtype OpT t a b = OpT { unOpT :: t a b }
-  deriving Bifunctor
-
-newtype OpU i = OpU { unOpU :: i }
-
-instance Structure t => Structure (OpT t)
-  where
-  type Arrow (OpT t) = Op (Arrow t)
-
-instance (Profunctor (Arrow t), Bifunctor t, Associative t) => Associative (OpT t)
-  where
-  assoc = Iso f b
-    where
-    f = Op $ dimap (second unOpT . unOpT) (first OpT . OpT) $ bwd $ assoc @t
-    b = Op $ dimap (first unOpT . unOpT) (second OpT . OpT) $ fwd (assoc @t)
-
-instance (Profunctor (Arrow t), Bifunctor t, Tensor t) => Tensor (OpT t)
-  where
-  type Unit (OpT t) = OpU (Unit t)
-  lunit = Iso f b
-    where
-    f = Op $ dimap id (OpT . first OpU) $ bwd $ lunit @t
-    b = Op $ dimap (first unOpU . unOpT) id $ fwd $ lunit @t
-  runit = Iso f b
-    where
-    f = Op $ dimap id (OpT . second OpU) $ bwd $ runit @t
-    b = Op $ dimap (second unOpU . unOpT) id $ fwd $ runit @t
+  type Unit (⊠) = Void
+  lunit = Iso (these absurd id absurd) That
+  runit = Iso (these id absurd (const absurd)) This
