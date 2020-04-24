@@ -17,10 +17,10 @@ empty = absurd <$> unitF @(+) @(×) ()
 
 infixl 3 <|>
 
-instance A.Alternative f => Semigroupal (+) (×) f
+instance {-# OVERLAPPABLE #-} A.Alternative f => Semigroupal (+) (×) f
   where
   combineF (fa, fb) = (Left <$> fa) A.<|> (Right <$> fb)
 
-instance A.Alternative f => Monoidal (+) (×) f
+instance {-# OVERLAPPABLE #-} A.Alternative f => Monoidal (+) (×) f
   where
   unitF _ = A.empty

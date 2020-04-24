@@ -20,10 +20,10 @@ liftA2 f fa fb = uncurry f <$> zip fa fb
 
 infixl 4 <*>
 
-instance A.Applicative f => Semigroupal (×) (×) f
+instance {-# OVERLAPPABLE #-} A.Applicative f => Semigroupal (×) (×) f
   where
   combineF (fa, fb) = (,) <$> fa A.<*> fb
 
-instance A.Applicative f => Monoidal (×) (×) f
+instance {-# OVERLAPPABLE #-} A.Applicative f => Monoidal (×) (×) f
   where
   unitF = A.pure
