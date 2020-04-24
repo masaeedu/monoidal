@@ -58,18 +58,28 @@ instance Associative (⊠)
   where
   assoc = Iso assocThese unassocThese
 
-class Structure t => Symmetric t
+class Structure t => Braided t
+  where
+  braid :: Iso (Arrow t) (x `t` y) (y `t` x)
+
+  default braid :: Symmetric t => Iso (Arrow t) (x `t` y) (y `t` x)
+  braid = Iso symm symm
+
+class Braided t => Symmetric t
   where
   symm :: Arrow t (x `t` y) (y `t` x)
 
+instance Braided (×)
 instance Symmetric (×)
   where
   symm (x, y) = (y, x)
 
+instance Braided (+)
 instance Symmetric (+)
   where
   symm = either Right Left
 
+instance Braided (⊠)
 instance Symmetric (⊠)
   where
   symm = swapThese
