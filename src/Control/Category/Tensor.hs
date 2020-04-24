@@ -17,6 +17,9 @@ type (×) = (,)
 type (+) = Either
 type (⊠) = These
 
+infixl 6 +
+infixl 7 ×
+
 class (Category (Arrow t)) => Structure t
   where
   type Arrow t :: * -> * -> *
