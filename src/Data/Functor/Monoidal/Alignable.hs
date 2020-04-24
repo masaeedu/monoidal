@@ -16,3 +16,14 @@ unalign = uncombineF
 
 alignAA :: (Apply f, Alt f) => f a -> f b -> f (a ⊠ b)
 alignAA fa fb = These <$> fa <*> fb <|> This <$> fa <|> That <$> fb
+
+instance Semigroupal (⊠) (×) Maybe
+  where
+  combineF (Nothing, Nothing) = Nothing
+  combineF (Just a, Nothing) = Just $ This a
+  combineF (Nothing, Just b) = Just $ That b
+  combineF (Just a, Just b) = Just $ These a b
+
+instance Monoidal (⊠) (×) Maybe
+  where
+  unitF = const Nothing
