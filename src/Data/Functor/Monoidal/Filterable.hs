@@ -12,3 +12,7 @@ mapMaybe ab = snd . partition . fmap (maybe (Left ()) Right . ab)
 
 filter :: Filter f => (a -> Bool) -> f a -> f a
 filter f = mapMaybe (\a -> if f a then Just a else Nothing)
+
+instance OpSemigroupal (+) (×) f => OpMonoidal (+) (×) f
+  where
+  discardF = const ()
