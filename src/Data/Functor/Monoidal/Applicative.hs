@@ -18,6 +18,8 @@ liftA2 f fa fb = uncurry f <$> zip fa fb
 (<*>) :: Apply f => f (a -> b) -> f a -> f b
 (<*>) fab fa = (uncurry ($)) <$> zip fab fa
 
+infixl 4 <*>
+
 instance A.Applicative f => Semigroupal (×) (×) f
   where
   combineF (fa, fb) = (,) <$> fa A.<*> fb
