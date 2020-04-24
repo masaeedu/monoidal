@@ -64,5 +64,3 @@ type Alternative = Monoidal   (+) (×)
 
 type Select f = (Functor f, forall a. Apply (Tannen f (+) a))
 type Selective f = (Applicative f, Select f)
-
-newtype FromBase f a = FromBase { unFromBase :: f a }
