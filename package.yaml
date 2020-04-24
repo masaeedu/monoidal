@@ -12,6 +12,9 @@ dependencies:
   - bifunctors
   - profunctors
   - these
+  - hedgehog
+  - tasty
+  - tasty-hedgehog
 
 ghc-options: -Wall
 default-extensions:
@@ -46,3 +49,9 @@ default-extensions:
   - AllowAmbiguousTypes
 
 library: {}
+tests:
+  monoidal-test:
+    main: Main.hs
+    source-dirs: test
+    dependencies:
+      - monoidal
