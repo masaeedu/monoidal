@@ -46,6 +46,16 @@ rdistributivity1, rdistributivity2 :: forall i1 o1 i2 o2 f a b c.
   (f a `o2` f b) `o1` f c -> f ((a `i1` c) `i2` (b `i1` c))
 rdistributivity1 = first combineF >>> combineF >>> fmap rdistrib
 rdistributivity2 = rdistrib >>> bimap combineF combineF >>> combineF
+
+symmetry1, symmetry2 :: forall t u f a b.
+  ( Semigroupal t u f
+  , Symmetric t
+  , Symmetric u
+  ) =>
+  f a `u` f b -> f (b `t` a)
+symmetry1 = symm >>> combineF
+symmetry2 = combineF >>> fmap symm
+
 opassociativity1, opassociativity2 :: forall t u f a b c.
   OpSemigroupal t u f =>
   f (a `t` (b `t` c)) -> f a `u` f b `u` f c
