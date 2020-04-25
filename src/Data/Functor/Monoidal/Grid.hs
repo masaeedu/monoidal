@@ -1,22 +1,29 @@
 module Data.Functor.Monoidal.Grid where
 
 import Control.Category.Tensor
+
 import Data.Functor.Monoidal.Class
+import Data.Functor.Monoidal.Alignable
 
 import Data.These
 import Data.Void
 
-instance Semigroupal (⊠) (⊠) Maybe
-  where
-  combineF (This Nothing)            = Nothing
-  combineF (That Nothing)            = Nothing
-  combineF (This (Just a))           = Just $ This a
-  combineF (That (Just b))           = Just $ That b
-  combineF (These (Just a) Nothing)  = Just $ This a
-  combineF (These Nothing (Just b))  = Just $ That b
-  combineF (These Nothing Nothing)   = Nothing
-  combineF (These (Just a) (Just b)) = Just $ These a b
+grid :: Grid f => f a ⊠ f b -> f (a ⊠ b)
+grid = combineF
 
-instance Monoidal (⊠) (⊠) Maybe
+gridA :: Align f => f a ⊠ f b -> f (a ⊠ b)
+gridA (This x) = This <$> x
+gridA (That x) = That <$> x
+gridA (These x y) = align x y
+
+instance Semigroupal (⊠) (⊠) f => Monoidal (⊠) (⊠) f
   where
   unitF = absurd
+
+instance Semigroupal (⊠) (⊠) Maybe
+  where
+  combineF = gridA
+
+instance Semigroupal (⊠) (⊠) []
+  where
+  combineF = gridA
