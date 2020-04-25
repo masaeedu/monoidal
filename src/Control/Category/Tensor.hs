@@ -114,20 +114,51 @@ class (Structure times, Structure plus, Arrow times ~ Arrow plus) => LaxRightDis
   where
   rdistrib :: Arrow times ((x `plus` y) `times` z) ((x `times` z) `plus` (y `times` z))
 
-instance LaxLeftDistributive (×) (+)
+class OpLaxLeftDistributive times plus
   where
-  ldistrib (x, Left y) = Left (x, y)
-  ldistrib (x, Right y) = Right (x, y)
+  opldistrib :: Arrow times ((x `times` y) `plus` (x `times` z)) (x `times` (y `plus` z))
 
-instance LaxRightDistributive (×) (+)
+class OpLaxRightDistributive times plus
   where
-  rdistrib (Left x, y) = Left (x, y)
-  rdistrib (Right x, y) = Right (x, y)
+  oprdistrib :: Arrow times ((x `times` z) `plus` (y `times` z)) ((x `plus` y) `times` z)
 
-instance LaxLeftDistributive (×) (×)
-  where
-  ldistrib (x, (y, z)) = ((x, y), (x, z))
+type LeftRig  times plus = (LaxLeftDistributive  times plus, OpLaxLeftDistributive  times plus)
+type RightRig times plus = (LaxRightDistributive times plus, OpLaxRightDistributive times plus)
 
-instance LaxRightDistributive (×) (×)
+type Rig times plus = (LeftRig times plus, RightRig times plus)
+
+instance
+  ( Structure plus
+  , Bifunctor plus
+  , Arrow plus ~ Arrow (×)
+  ) =>
+  LaxLeftDistributive (×) plus
   where
-  rdistrib ((x, y), z) = ((x, z), (y, z))
+  ldistrib (x, p) = bimap (x, ) (x, ) p
+
+instance
+  ( Structure plus
+  , Bifunctor plus
+  , Arrow plus ~ Arrow (×)
+  ) =>
+  LaxRightDistributive (×) plus
+  where
+  rdistrib (p, z) = bimap (, z) (, z) p
+
+instance
+  ( Structure times
+  , Bifunctor times
+  , Arrow times ~ Arrow (+)
+  ) =>
+  OpLaxLeftDistributive times (+)
+  where
+  opldistrib = either (second Left) (second Right)
+
+instance
+  ( Structure times
+  , Bifunctor times
+  , Arrow times ~ Arrow (+)
+  ) =>
+  OpLaxRightDistributive times (+)
+  where
+  oprdistrib = either (first Left) (first Right)
