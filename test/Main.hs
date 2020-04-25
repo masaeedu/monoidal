@@ -87,7 +87,7 @@ listTests =
 
   , rdistributive  @(×) @(×) @(+) @(×) "Applicative over Alternative" lift Gen.bool
   , rdistributive  @(×) @(×) @(⊠) @(×) "Applicative over Align"       lift Gen.bool
-  , opdistributive @(+) @(+) @(+) @(+) "Decisive over Decisive"       lift Gen.bool
+  , opdistributive @(+) @(+) @(+) @(+) "Decisive    over Decisive"    lift Gen.bool
 
   , SL.selective lift Gen.bool Gen.bool (pure id <|> pure not) (pure (&&) <|> pure (||))
   ]
