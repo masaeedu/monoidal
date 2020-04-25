@@ -27,3 +27,13 @@ instance Semigroupal (⊠) (×) Maybe
 instance Monoidal (⊠) (×) Maybe
   where
   unitF = const Nothing
+
+instance Semigroupal (⊠) (×) []
+  where
+  combineF (xs, []) = This <$> xs
+  combineF ([], ys) = That <$> ys
+  combineF (x : xs, y : ys) = These x y : align xs ys
+
+instance Monoidal (⊠) (×) []
+  where
+  unitF = const []
