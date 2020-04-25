@@ -23,6 +23,8 @@ import Data.Functor.Monoidal.Alternative
 import Data.Functor.Monoidal.Alignable
 import Data.Functor.Monoidal.Selective ()
 
+import qualified Test.Selective as SL
+
 import Test.Monoidal
 
 instance Semigroupal (⊠) (×) Gen
@@ -36,9 +38,9 @@ instance Monoidal (⊠) (×) Gen
 list' :: Gen x -> Gen [x]
 list' = Gen.list (Range.linear 0 10)
 
-slift :: (forall x. Gen x -> Gen (f x)) -> Gen a -> Gen (Tannen f (+) [Bool] a)
+slift :: (forall x. Gen x -> Gen (f x)) -> Gen a -> Gen (Tannen f (+) Bool a)
 slift lift g = Tannen <$>
-  (lift (Left <$> list' Gen.bool) <|> lift (Right <$> g))
+  (lift (Left <$> Gen.bool) <|> lift (Right <$> g))
 
 maybeTests :: TestTree
 maybeTests =
@@ -48,30 +50,46 @@ maybeTests =
   in
   testGroup "Maybe" $
   [ monoidal      @(×) @(×) "Applicative" lift Gen.bool
+  , symmetric     @(×) @(×) "Applicative" lift Gen.bool
   , opsemigroupal @(+) @(+) "Decide"      lift Gen.bool
   , monoidal      @(+) @(×) "Alternative" lift Gen.bool
   , opmonoidal    @(+) @(×) "Filter"      lift Gen.bool
   , monoidal      @(⊠) @(×) "Align"       lift Gen.bool
+  , symmetric     @(⊠) @(×) "Align"       lift Gen.bool
   , monoidal      @(⊠) @(⊠) "Grid"        lift Gen.bool
+  , symmetric     @(⊠) @(×) "Grid"        lift Gen.bool
   , monoidal      @(×) @(×) "Selective"   (slift lift) Gen.bool
 
-  , distributive  @(×) @(×) @(+) @(×) "Applicative over Alternative" lift Gen.bool
+  , distributive   @(×) @(×) @(×) @(×) "Applicative over Applicative" lift Gen.bool
+  , distributive   @(×) @(×) @(+) @(×) "Applicative over Alternative" lift Gen.bool
+  , distributive   @(×) @(×) @(⊠) @(×) "Applicative over Align"       lift Gen.bool
+  , opdistributive @(+) @(+) @(+) @(+) "Decisive    over Decisive"    lift Gen.bool
+  , opdistributive @(+) @(×) @(+) @(+) "Filterable  over Decisive"    lift Gen.bool
+
+  , SL.selective lift Gen.bool Gen.bool (pure id <|> pure not) (pure (&&) <|> pure (||))
   ]
 
 listTests :: TestTree
 listTests =
   let
     lift :: Gen x -> Gen [x]
-    lift = Gen.list $ Range.linear 0 10
+    lift = list'
   in
   testGroup "[]" $
   [ monoidal      @(×) @(×) "Applicative" lift Gen.bool
   , opsemigroupal @(+) @(+) "Decide"      lift Gen.bool
   , monoidal      @(+) @(×) "Alternative" lift Gen.bool
   , opmonoidal    @(+) @(×) "Filter"      lift Gen.bool
+  , monoidal      @(⊠) @(×) "Align"       lift Gen.bool
+  , symmetric     @(⊠) @(×) "Align"       lift Gen.bool
+  , monoidal      @(⊠) @(⊠) "Grid"        lift Gen.bool
   , monoidal      @(×) @(×) "Selective"   (slift lift) Gen.bool
 
-  , rdistributive @(×) @(×) @(+) @(×) "Applicative over Alternative" lift Gen.bool
+  , rdistributive  @(×) @(×) @(+) @(×) "Applicative over Alternative" lift Gen.bool
+  , rdistributive  @(×) @(×) @(⊠) @(×) "Applicative over Align"       lift Gen.bool
+  , opdistributive @(+) @(+) @(+) @(+) "Decisive over Decisive"       lift Gen.bool
+
+  , SL.selective lift Gen.bool Gen.bool (pure id <|> pure not) (pure (&&) <|> pure (||))
   ]
 
 tupleTests :: TestTree
