@@ -20,6 +20,12 @@ liftA2 f fa fb = uncurry f <$> zip fa fb
 
 infixl 4 <*>
 
+(*>) :: Apply f => f a -> f b -> f b
+x *> y = flip const <$> x <*> y
+
+(<*) :: Apply f => f a -> f b -> f a
+x <* y = const <$> x <*> y
+
 instance {-# OVERLAPPABLE #-} A.Applicative f => Semigroupal (×) (×) f
   where
   combineF (fa, fb) = (,) <$> fa A.<*> fb
