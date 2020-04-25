@@ -73,3 +73,23 @@ oprunitality1, oprunitality2 :: forall t u f a.
   f a -> f a `u` Unit u
 oprunitality1 = bwd runit
 oprunitality2 = second (discardF @t @u @f) <<< uncombineF <<< fmap (bwd (runit @t))
+
+opldistributivity1, opldistributivity2 :: forall i1 o1 i2 o2 f a b c.
+  ( OpSemigroupal i1 o1 f
+  , OpSemigroupal i2 o2 f
+  , OpLaxLeftDistributive i1 i2
+  , OpLaxLeftDistributive o1 o2
+  ) =>
+  f ((a `i1` b) `i2` (a `i1` c)) -> f a `o1` (f b `o2` f c)
+opldistributivity1 = second uncombineF <<< uncombineF <<< fmap opldistrib
+opldistributivity2 = opldistrib <<< bimap uncombineF uncombineF <<< uncombineF
+
+oprdistributivity1, oprdistributivity2 :: forall i1 o1 i2 o2 f a b c.
+  ( OpSemigroupal i1 o1 f
+  , OpSemigroupal i2 o2 f
+  , OpLaxRightDistributive i1 i2
+  , OpLaxRightDistributive o1 o2
+  ) =>
+  f ((a `i1` c) `i2` (b `i1` c)) -> (f a `o2` f b) `o1` f c
+oprdistributivity1 = first uncombineF <<< uncombineF <<< fmap oprdistrib
+oprdistributivity2 = oprdistrib <<< bimap uncombineF uncombineF <<< uncombineF
