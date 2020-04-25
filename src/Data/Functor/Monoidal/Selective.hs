@@ -1,14 +1,12 @@
-{-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE LambdaCase, TupleSections #-}
 module Data.Functor.Monoidal.Selective where
 
 import Prelude hiding (Applicative(..), zip)
 
-import Control.Category ((>>>))
 import Control.Category.Tensor
 
 import Data.Functor.Monoidal.Class
 import Data.Functor.Monoidal.Applicative
-import Data.Functor.Monoidal.Alternative
 import Data.Functor.Monoidal.Decisive
 
 import Data.Bifunctor
@@ -35,19 +33,26 @@ select v f = branch f (pure id) v
 (<*?) :: Selective f => f (a + b) -> f (a -> b) -> f b
 (<*?) = select
 
-szipDAA :: (Decide f, Alt f, Apply f) => f (e + a) × f (e + b) -> f (e + a × b)
-szipDAA = bimap decide decide >>> \case
-  (Left e1, Left e2) -> Left <$> (e1 <|> e2)
-  (Left e , Right _) -> Left <$> e
-  (Right _, Left e ) -> Left <$> e
-  (Right a, Right b) -> Right <$> zip a b
+szipDAA :: (Decide f, Apply f) => f (e + a) × f (e + b) -> f (e + a × b)
+szipDAA (x, y) = case decide x of
+  Left e -> Left <$> e
+  Right a -> fmap (first snd . ldistrib) $ zip a y
 
-instance {-# OVERLAPPABLE #-}
-  (Decide f, Alt f, Apply f) => Semigroupal (×) (×) (Tannen f (+) e)
+szipM :: Monad f => f (e + a) × f (e + b) -> f (e + a × b)
+szipM (x, y) = x >>= either (return . Left) (\a -> fmap (fmap $ (a,)) y)
+
+instance Semigroupal (×) (×) (Tannen Maybe (+) e)
   where
   combineF (Tannen a, Tannen b) = Tannen $ szipDAA (a, b)
 
-instance {-# OVERLAPPABLE #-}
-  (Semigroupal (×) (×) (Tannen f (+) e), Applicative f) => Monoidal (×) (×) (Tannen f (+) e)
+instance Monoidal (×) (×) (Tannen Maybe (+) e)
+  where
+  unitF = Tannen . pure . Right
+
+instance Semigroupal (×) (×) (Tannen [] (+) e)
+  where
+  combineF (Tannen a, Tannen b) = Tannen $ szipM (a, b)
+
+instance Monoidal (×) (×) (Tannen [] (+) e)
   where
   unitF = Tannen . pure . Right
