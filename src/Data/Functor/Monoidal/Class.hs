@@ -5,7 +5,10 @@ import Prelude hiding (Applicative(..))
 
 import Control.Category.Tensor
 
+import Data.Bifunctor
 import Data.Bifunctor.Tannen
+
+import Data.Functor.Compose
 
 class
   ( Associative i
@@ -65,3 +68,10 @@ type Alternative = Monoidal   (+) (×)
 
 type Select f = (Functor f, forall a. Apply (Tannen f (+) a))
 type Selective f = (Applicative f, Select f)
+
+instance
+  ( Semigroupal b c f
+  , Semigroupal a b g
+  ) => Semigroupal a c (Compose f g)
+  where
+  combineF = Compose . fmap combineF . combineF @b @c . bimap getCompose getCompose
