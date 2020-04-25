@@ -19,6 +19,12 @@ instance OpSemigroupal (+) (+) Maybe
   uncombineF (Just (Left a)) = Left $ Just a
   uncombineF (Just (Right b)) = Right $ Just b
 
+instance OpSemigroupal (+) (+) []
+  where
+  uncombineF [] = Left []
+  uncombineF (Left a : xs) = first (a:) $ decide xs
+  uncombineF (Right b : xs) = second (b:) $ decide xs
+
 instance OpSemigroupal (+) (+) ((,) x)
   where
   uncombineF (x, Left a) = Left $ (x, a)
@@ -27,9 +33,3 @@ instance OpSemigroupal (+) (+) ((,) x)
 instance OpMonoidal (+) (+) ((,) a)
   where
   discardF = snd
-
-instance OpSemigroupal (+) (+) []
-  where
-  uncombineF [] = Left []
-  uncombineF (Left a : xs) = first (a:) $ decide xs
-  uncombineF (Right b : xs) = second (b:) $ decide xs
