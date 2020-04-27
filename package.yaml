@@ -16,7 +16,7 @@ dependencies:
   - tasty
   - tasty-hedgehog
 
-ghc-options: -Wall
+ghc-options: [-Wall, -Wno-orphans]
 default-extensions:
   - GADTs
 
