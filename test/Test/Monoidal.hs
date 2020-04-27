@@ -151,6 +151,19 @@ oprdistributivity lift g = property $ do
   v <- forAll $ lift $ combineF (combineF (g, g), combineF (g, g))
   oprdistributivity1 @i1 @o1 @i2 @o2 v === oprdistributivity2 @i1 @o1 @i2 @o2 v
 
+opsymmetry :: forall t u f a.
+  ( OpSemigroupal t u f
+  , Symmetric t
+  , Symmetric u
+  , Testable (f a `u` f a)
+  , Show (f (a `t` a))
+  , Semigroupal t (×) Gen
+  ) =>
+  (forall x. Gen x -> Gen (f x)) -> Gen a -> Property
+opsymmetry lift g = property $ do
+  v <- forAll $ lift $ combineF (g, g)
+  opsymmetry1 @t @u @f v === opsymmetry2 @t @u @f v
+
 semigroupal :: forall t u f a.
   ( Semigroupal t u f
   , Show (f a `u` f a `u` f a)
@@ -255,7 +268,7 @@ opsemigroupal :: forall t u f a.
   String -> (forall x. Gen x -> Gen (f x)) -> Gen a -> TestTree
 opsemigroupal name lift g =
   testGroup name $
-  [ testProperty "Associativity" $ opassociativity @t @u lift g
+  [ testProperty "Associativity (opposite)" $ opassociativity @t @u lift g
   ]
 
 opmonoidal :: forall t u f a.
@@ -270,9 +283,9 @@ opmonoidal :: forall t u f a.
   String -> (forall x. Gen x -> Gen (f x)) -> Gen a -> TestTree
 opmonoidal name lift g =
   testGroup name $
-  [ testProperty "Associativity" $ opassociativity @t @u lift g
-  , testProperty "Left unitality" $ oplunitality @t @u lift g
-  , testProperty "Right unitality" $ oprunitality @t @u lift g
+  [ testProperty "Associativity (opposite)" $ opassociativity @t @u lift g
+  , testProperty "Left unitality (opposite)" $ oplunitality @t @u lift g
+  , testProperty "Right unitality (opposite)" $ oprunitality @t @u lift g
   ]
 
 opldistributive :: forall i1 o1 i2 o2 f a.
@@ -288,7 +301,7 @@ opldistributive :: forall i1 o1 i2 o2 f a.
   String -> (forall x. Gen x -> Gen (f x)) -> Gen a -> TestTree
 opldistributive name lift g =
   testGroup name $
-  [ testProperty "Left distributivity" $ opldistributivity @i1 @o1 @i2 @o2 lift g
+  [ testProperty "Left distributivity (opposite)" $ opldistributivity @i1 @o1 @i2 @o2 lift g
   ]
 
 oprdistributive :: forall i1 o1 i2 o2 f a.
@@ -304,7 +317,7 @@ oprdistributive :: forall i1 o1 i2 o2 f a.
   String -> (forall x. Gen x -> Gen (f x)) -> Gen a -> TestTree
 oprdistributive name lift g =
   testGroup name $
-  [ testProperty "Right distributivity" $ oprdistributivity @i1 @o1 @i2 @o2 lift g
+  [ testProperty "Right distributivity (opposite)" $ oprdistributivity @i1 @o1 @i2 @o2 lift g
   ]
 
 opdistributive :: forall i1 o1 i2 o2 f a.
@@ -323,6 +336,20 @@ opdistributive :: forall i1 o1 i2 o2 f a.
   String -> (forall x. Gen x -> Gen (f x)) -> Gen a -> TestTree
 opdistributive name lift g =
   testGroup name $
-  [ testProperty "Left distributivity" $ oprdistributivity @i1 @o1 @i2 @o2 lift g
-  , testProperty "Right distributivity" $ oprdistributivity @i1 @o1 @i2 @o2 lift g
+  [ testProperty "Left distributivity (opposite)" $ oprdistributivity @i1 @o1 @i2 @o2 lift g
+  , testProperty "Right distributivity (opposite)" $ oprdistributivity @i1 @o1 @i2 @o2 lift g
+  ]
+
+opsymmetric :: forall t u f a.
+  ( OpSemigroupal t u f
+  , Symmetric t
+  , Symmetric u
+  , Testable (f a `u` f a)
+  , Show (f (a `t` a))
+  , Semigroupal t (×) Gen
+  ) =>
+  String -> (forall x. Gen x -> Gen (f x)) -> Gen a -> TestTree
+opsymmetric name lift g =
+  testGroup name $
+  [ testProperty "Symmetry (opposite)" $ opsymmetry @t @u lift g
   ]

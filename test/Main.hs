@@ -11,6 +11,8 @@ import Hedgehog.Range as Range
 
 import Control.Category.Tensor
 
+import Control.Applicative (ZipList(..))
+
 import Data.Bifunctor.Tannen
 
 import Data.Functor.Monoidal.Class
@@ -54,6 +56,7 @@ maybeTests =
   , opsemigroupal @(+) @(+) "Decide"      lift Gen.bool
   , monoidal      @(+) @(×) "Alternative" lift Gen.bool
   , opmonoidal    @(+) @(×) "Filter"      lift Gen.bool
+  , opsymmetric   @(+) @(×) "Filter"      lift Gen.bool
   , monoidal      @(⊠) @(×) "Align"       lift Gen.bool
   , symmetric     @(⊠) @(×) "Align"       lift Gen.bool
   , monoidal      @(⊠) @(⊠) "Grid"        lift Gen.bool
@@ -83,11 +86,41 @@ listTests =
   , monoidal      @(⊠) @(×) "Align"       lift Gen.bool
   , symmetric     @(⊠) @(×) "Align"       lift Gen.bool
   , monoidal      @(⊠) @(⊠) "Grid"        lift Gen.bool
+  , symmetric     @(⊠) @(⊠) "Grid"        lift Gen.bool
   , monoidal      @(×) @(×) "Selective"   (slift lift) Gen.bool
 
   , rdistributive  @(×) @(×) @(+) @(×) "Applicative over Alternative" lift Gen.bool
   , rdistributive  @(×) @(×) @(⊠) @(×) "Applicative over Align"       lift Gen.bool
   , opdistributive @(+) @(+) @(+) @(+) "Decisive    over Decisive"    lift Gen.bool
+
+  , SL.selective lift Gen.bool Gen.bool (pure id <|> pure not) (pure (&&) <|> pure (||))
+  ]
+
+zlTests :: TestTree
+zlTests =
+  let
+    lift :: Gen x -> Gen (ZipList x)
+    lift = fmap ZipList . list'
+  in
+  testGroup "ZipList" $
+  [ monoidal      @(×) @(×) "Applicative" lift Gen.bool
+  , symmetric     @(×) @(×) "Applicative" lift Gen.bool
+  , opsemigroupal @(+) @(+) "Decide"      lift Gen.bool
+  , opsymmetric   @(+) @(+) "Decide"      lift Gen.bool
+  , monoidal      @(+) @(×) "Alternative" lift Gen.bool
+  , symmetric     @(+) @(×) "Alternative" lift Gen.bool
+  , opmonoidal    @(+) @(×) "Filter"      lift Gen.bool
+  , opsymmetric   @(+) @(×) "Filter"      lift Gen.bool
+  , monoidal      @(⊠) @(×) "Align"       lift Gen.bool
+  , symmetric     @(⊠) @(×) "Align"       lift Gen.bool
+  , monoidal      @(×) @(×) "Selective"   (slift lift) Gen.bool
+  , symmetric     @(×) @(×) "Selective"   (slift lift) Gen.bool
+
+  , distributive   @(×) @(×) @(×) @(×) "Applicative over Applicative" lift Gen.bool
+  , distributive   @(×) @(×) @(⊠) @(×) "Applicative over Align"       lift Gen.bool
+  , distributive   @(×) @(×) @(+) @(×) "Applicative over Alternative" lift Gen.bool
+  , opdistributive @(+) @(+) @(+) @(+) "Decisive    over Decisive"    lift Gen.bool
+  , opdistributive @(+) @(×) @(+) @(+) "Filterable  over Decisive"    lift Gen.bool
 
   , SL.selective lift Gen.bool Gen.bool (pure id <|> pure not) (pure (&&) <|> pure (||))
   ]

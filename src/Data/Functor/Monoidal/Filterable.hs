@@ -1,5 +1,7 @@
 module Data.Functor.Monoidal.Filterable where
 
+import Control.Applicative (ZipList(..))
+
 import Control.Category.Tensor
 
 import Data.Functor.Monoidal.Class
@@ -32,3 +34,5 @@ instance OpSemigroupal (+) (×) []
   uncombineF [] = ([], [])
   uncombineF (Left a : xs) = first (a:) $ partition xs
   uncombineF (Right b : xs) = second (b:) $ partition xs
+
+deriving via [] instance OpSemigroupal (+) (×) ZipList

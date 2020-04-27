@@ -2,6 +2,8 @@ module Data.Functor.Monoidal.Alignable where
 
 import Prelude hiding (zip, (<*>))
 
+import Control.Applicative (ZipList(..))
+
 import Control.Category.Tensor
 import Data.Functor.Monoidal.Class
 import Data.Functor.Monoidal.Applicative
@@ -37,3 +39,11 @@ instance Semigroupal (⊠) (×) []
 instance Monoidal (⊠) (×) []
   where
   unitF = const []
+
+instance Semigroupal (⊠) (×) ZipList
+  where
+  combineF = uncurry alignAA
+
+instance Monoidal (⊠) (×) ZipList
+  where
+  unitF = const $ ZipList $ []

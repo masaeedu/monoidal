@@ -1,5 +1,6 @@
 module Data.Functor.Monoidal.Decisive where
 
+import Control.Applicative (ZipList(..))
 import Control.Category.Tensor
 
 import Data.Functor.Monoidal.Class
@@ -22,7 +23,7 @@ instance OpSemigroupal (+) (+) Maybe
 instance OpSemigroupal (+) (+) []
   where
   uncombineF [] = Left []
-  uncombineF (Left a : xs) = first (a:) $ decide xs
+  uncombineF (Left a  : xs) = first  (a:) $ decide xs
   uncombineF (Right b : xs) = second (b:) $ decide xs
 
 instance OpSemigroupal (+) (+) ((,) x)
@@ -33,3 +34,12 @@ instance OpSemigroupal (+) (+) ((,) x)
 instance OpMonoidal (+) (+) ((,) a)
   where
   discardF = snd
+
+consZipList :: a -> ZipList a -> ZipList a
+consZipList a (ZipList xs) = ZipList $ a : xs
+
+instance OpSemigroupal (+) (+) ZipList
+  where
+  uncombineF (ZipList []) = Left $ ZipList $ []
+  uncombineF (ZipList (Left a  : xs)) = first  (a `consZipList`) $ decide (ZipList xs)
+  uncombineF (ZipList (Right b : xs)) = second (b `consZipList`) $ decide (ZipList xs)

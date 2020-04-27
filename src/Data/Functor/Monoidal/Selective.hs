@@ -3,6 +3,7 @@ module Data.Functor.Monoidal.Selective where
 
 import Prelude hiding (Applicative(..), zip)
 
+import Control.Applicative (ZipList(..))
 import Control.Category.Tensor
 
 import Data.Functor.Monoidal.Class
@@ -54,5 +55,13 @@ instance Semigroupal (×) (×) (Tannen [] (+) e)
   combineF (Tannen a, Tannen b) = Tannen $ szipM (a, b)
 
 instance Monoidal (×) (×) (Tannen [] (+) e)
+  where
+  unitF = Tannen . pure . Right
+
+instance Semigroupal (×) (×) (Tannen ZipList (+) e)
+  where
+  combineF = Tannen . szipDAA . bimap runTannen runTannen
+
+instance Monoidal (×) (×) (Tannen ZipList (+) e)
   where
   unitF = Tannen . pure . Right

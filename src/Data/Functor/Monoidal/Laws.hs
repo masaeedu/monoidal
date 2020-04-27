@@ -93,3 +93,12 @@ oprdistributivity1, oprdistributivity2 :: forall i1 o1 i2 o2 f a b c.
   f ((a `i1` c) `i2` (b `i1` c)) -> (f a `o2` f b) `o1` f c
 oprdistributivity1 = first uncombineF <<< uncombineF <<< fmap oprdistrib
 oprdistributivity2 = oprdistrib <<< bimap uncombineF uncombineF <<< uncombineF
+
+opsymmetry1, opsymmetry2 :: forall t u f a b.
+  ( OpSemigroupal t u f
+  , Symmetric t
+  , Symmetric u
+  ) =>
+  f (b `t` a) -> f a `u` f b
+opsymmetry1 = symm <<< uncombineF
+opsymmetry2 = uncombineF <<< fmap symm
