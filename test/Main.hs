@@ -29,6 +29,10 @@ import qualified Test.Selective as SL
 
 import Test.Monoidal
 
+instance Semigroupal (+) (×) Gen
+  where
+  combineF (g1, g2) = Gen.choice [Left <$> g1, Right <$> g2]
+
 instance Semigroupal (⊠) (×) Gen
   where
   combineF = uncurry alignAA
@@ -67,7 +71,6 @@ maybeTests =
   , distributive   @(×) @(×) @(+) @(×) "Applicative over Alternative" lift Gen.bool
   , distributive   @(×) @(×) @(⊠) @(×) "Applicative over Align"       lift Gen.bool
   , opdistributive @(+) @(+) @(+) @(+) "Decisive    over Decisive"    lift Gen.bool
-  , opdistributive @(+) @(×) @(+) @(+) "Filterable  over Decisive"    lift Gen.bool
 
   , SL.selective lift Gen.bool Gen.bool (pure id <|> pure not) (pure (&&) <|> pure (||))
   ]
