@@ -82,25 +82,27 @@ instance Symmetric (⊠)
   where
   symm = swapThese
 
-class Associative t => Tensor t
+class Structure t => Unital t
   where
   type Unit t :: *
   lunit :: Iso (Arrow t) (t (Unit t) x) x
   runit :: Iso (Arrow t) (t x (Unit t)) x
 
-instance Tensor (×)
+type Tensor t = (Associative t, Unital t)
+
+instance Unital (×)
   where
   type Unit (×) = ()
   lunit = Iso snd ((), )
   runit = Iso fst (, ())
 
-instance Tensor (+)
+instance Unital (+)
   where
   type Unit (+) = Void
   lunit = Iso (either absurd id) Right
   runit = Iso (either id absurd) Left
 
-instance Tensor (⊠)
+instance Unital (⊠)
   where
   type Unit (⊠) = Void
   lunit = Iso (these absurd id absurd) That
