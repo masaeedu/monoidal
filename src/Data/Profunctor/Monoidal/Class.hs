@@ -66,5 +66,3 @@ type Terminal  = Monoidal (×) (×) (×)
 type Initial   = Monoidal (+) (+) (×)
 type Universal = Monoidal (×) (+) (×)
 type Unique    = Monoidal (+) (×) (×)
-
-newtype FromBase p a b = FromBase { unFromBase :: p a b }
