@@ -25,9 +25,9 @@ import Data.Functor.Monoidal.Alternative
 import Data.Functor.Monoidal.Alignable
 import Data.Functor.Monoidal.Selective ()
 
-import qualified Test.Selective as SL
-
-import Test.Monoidal
+import qualified Data.Functor.Monoidal.Selective.Test as SL
+import Data.Functor.Monoidal.Test
+import Control.Category.Tensor.Test
 
 instance Semigroupal (+) (×) Gen
   where
@@ -47,6 +47,27 @@ list' = Gen.list (Range.linear 0 10)
 slift :: (forall x. Gen x -> Gen (f x)) -> Gen a -> Gen (Tannen f (+) Bool a)
 slift lift g = Tannen <$>
   (lift (Left <$> Gen.bool) <|> lift (Right <$> g))
+
+timesTests :: TestTree
+timesTests =
+  testGroup "×" $
+  [ associative @(×) "×" Gen.bool
+  , unital      @(×) "×" Gen.bool
+  ]
+
+sumTests :: TestTree
+sumTests =
+  testGroup "+" $
+  [ associative @(+) "+" Gen.bool
+  , unital      @(+) "+" Gen.bool
+  ]
+
+theseTests :: TestTree
+theseTests =
+  testGroup "⊠" $
+  [ associative @(+) "⊠" Gen.bool
+  , unital      @(+) "⊠" Gen.bool
+  ]
 
 maybeTests :: TestTree
 maybeTests =
@@ -141,7 +162,11 @@ tupleTests =
 
 main :: IO ()
 main = defaultMain $ testGroup "Tests"
-  [ maybeTests
+  [ timesTests
+  , sumTests
+  , theseTests
+
+  , maybeTests
   , listTests
   , tupleTests
   ]
