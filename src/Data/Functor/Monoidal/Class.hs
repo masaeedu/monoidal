@@ -21,6 +21,9 @@ class
   where
   combineF :: Arrow o (f a `o` f b) (f (a `i` b))
 
+convolve :: Semigroupal t (×) f => f a -> f b -> f (t a b)
+convolve = curry combineF
+
 class
   ( Associative i
   , Associative o
@@ -42,6 +45,9 @@ class
   Monoidal i o f
   where
   unitF :: Arrow o (Unit o) (f (Unit i))
+
+husk :: forall t f. Monoidal t (×) f => f (Unit t)
+husk = unitF @t @(×) ()
 
 class
   ( Tensor i
