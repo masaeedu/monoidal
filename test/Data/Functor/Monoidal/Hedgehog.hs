@@ -90,7 +90,6 @@ rdistributivity :: forall i1 o1 i2 o2 f a.
   , TestablySemigroupal i2 o2 f
   , LaxRightDistributive i1 i2
   , LaxRightDistributive o1 o2
-  , Testable (f ((a `i1` a) `i2` (a `i1` a)))
   , Semigroupal o1 (×) Gen
   , Semigroupal o2 (×) Gen
   ) =>
