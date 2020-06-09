@@ -68,8 +68,8 @@ sumTests =
 theseTests :: TestTree
 theseTests =
   testGroup "⊠" $
-  [ associative @(+) "⊠" int'
-  , unital      @(+) "⊠" int'
+  [ associative @(⊠) "⊠" int'
+  , unital      @(⊠) "⊠" int'
   ]
 
 maybeTests :: TestTree
