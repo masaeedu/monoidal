@@ -17,6 +17,9 @@ class
   where
   combineP :: Arrow o (p a b `o` p c d) (p (a `l` c) (b `r` d))
 
+(-?-) :: Semigroupal l r (×) p => p a b -> p c d -> p (l a c) (r b d)
+(-?-) = curry combineP
+
 class
   ( Associative l
   , Associative r
