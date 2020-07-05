@@ -30,8 +30,8 @@ runitality2 = second (unitF @t @u @f) >>> combineF >>> fmap (fwd (runit @t))
 ldistributivity1, ldistributivity2 :: forall i1 o1 i2 o2 f a b c.
   ( Semigroupal i1 o1 f
   , Semigroupal i2 o2 f
-  , LaxLeftDistributive i1 i2
-  , LaxLeftDistributive o1 o2
+  , LaxLDistrib i1 i2
+  , LaxLDistrib o1 o2
   ) =>
   f a `o1` (f b `o2` f c) -> f ((a `i1` b) `i2` (a `i1` c))
 ldistributivity1 = second combineF >>> combineF >>> fmap ldistrib
@@ -40,8 +40,8 @@ ldistributivity2 = ldistrib >>> bimap combineF combineF >>> combineF
 rdistributivity1, rdistributivity2 :: forall i1 o1 i2 o2 f a b c.
   ( Semigroupal i1 o1 f
   , Semigroupal i2 o2 f
-  , LaxRightDistributive i1 i2
-  , LaxRightDistributive o1 o2
+  , LaxRDistrib i1 i2
+  , LaxRDistrib o1 o2
   ) =>
   (f a `o2` f b) `o1` f c -> f ((a `i1` c) `i2` (b `i1` c))
 rdistributivity1 = first combineF >>> combineF >>> fmap rdistrib
@@ -77,8 +77,8 @@ oprunitality2 = second (discardF @t @u @f) <<< uncombineF <<< fmap (bwd (runit @
 opldistributivity1, opldistributivity2 :: forall i1 o1 i2 o2 f a b c.
   ( OpSemigroupal i1 o1 f
   , OpSemigroupal i2 o2 f
-  , OpLaxLeftDistributive i1 i2
-  , OpLaxLeftDistributive o1 o2
+  , OpLaxLDistrib i1 i2
+  , OpLaxLDistrib o1 o2
   ) =>
   f ((a `i1` b) `i2` (a `i1` c)) -> f a `o1` (f b `o2` f c)
 opldistributivity1 = second uncombineF <<< uncombineF <<< fmap opldistrib
@@ -87,8 +87,8 @@ opldistributivity2 = opldistrib <<< bimap uncombineF uncombineF <<< uncombineF
 oprdistributivity1, oprdistributivity2 :: forall i1 o1 i2 o2 f a b c.
   ( OpSemigroupal i1 o1 f
   , OpSemigroupal i2 o2 f
-  , OpLaxRightDistributive i1 i2
-  , OpLaxRightDistributive o1 o2
+  , OpLaxRDistrib i1 i2
+  , OpLaxRDistrib o1 o2
   ) =>
   f ((a `i1` c) `i2` (b `i1` c)) -> (f a `o2` f b) `o1` f c
 oprdistributivity1 = first uncombineF <<< uncombineF <<< fmap oprdistrib

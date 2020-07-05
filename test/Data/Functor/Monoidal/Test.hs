@@ -40,8 +40,8 @@ ldistributive :: forall i1 o1 i2 o2 f a.
   ( Testable a
   , TestablySemigroupal i1 o1 f
   , TestablySemigroupal i2 o2 f
-  , LaxLeftDistributive i1 i2
-  , LaxLeftDistributive o1 o2
+  , LaxLDistrib i1 i2
+  , LaxLDistrib o1 o2
   , Semigroupal o1 (×) Gen
   , Semigroupal o2 (×) Gen
   ) =>
@@ -55,8 +55,8 @@ rdistributive :: forall i1 o1 i2 o2 f a.
   ( Testable a
   , TestablySemigroupal i1 o1 f
   , TestablySemigroupal i2 o2 f
-  , LaxRightDistributive i1 i2
-  , LaxRightDistributive o1 o2
+  , LaxRDistrib i1 i2
+  , LaxRDistrib o1 o2
   , Semigroupal o1 (×) Gen
   , Semigroupal o2 (×) Gen
   ) =>
@@ -70,10 +70,10 @@ distributive :: forall i1 o1 i2 o2 f a.
   ( Testable a
   , TestablySemigroupal i1 o1 f
   , TestablySemigroupal i2 o2 f
-  , LaxLeftDistributive i1 i2
-  , LaxLeftDistributive o1 o2
-  , LaxRightDistributive i1 i2
-  , LaxRightDistributive o1 o2
+  , LaxLDistrib i1 i2
+  , LaxLDistrib o1 o2
+  , LaxRDistrib i1 i2
+  , LaxRDistrib o1 o2
   , Semigroupal o1 (×) Gen
   , Semigroupal o2 (×) Gen
   ) =>
@@ -125,8 +125,8 @@ opldistributive :: forall i1 o1 i2 o2 f a.
   ( Testable a
   , TestablyOpSemigroupal i1 o1 f
   , TestablyOpSemigroupal i2 o2 f
-  , OpLaxLeftDistributive i1 i2
-  , OpLaxLeftDistributive o1 o2
+  , OpLaxLDistrib i1 i2
+  , OpLaxLDistrib o1 o2
   , Semigroupal i1 (×) Gen
   , Semigroupal i2 (×) Gen
   ) =>
@@ -140,8 +140,8 @@ oprdistributive :: forall i1 o1 i2 o2 f a.
   ( Testable a
   , TestablyOpSemigroupal i1 o1 f
   , TestablyOpSemigroupal i2 o2 f
-  , OpLaxRightDistributive i1 i2
-  , OpLaxRightDistributive o1 o2
+  , OpLaxRDistrib i1 i2
+  , OpLaxRDistrib o1 o2
   , Semigroupal i1 (×) Gen
   , Semigroupal i2 (×) Gen
   ) =>
@@ -155,10 +155,10 @@ opdistributive :: forall i1 o1 i2 o2 f a.
   ( Testable a
   , TestablyOpSemigroupal i1 o1 f
   , TestablyOpSemigroupal i2 o2 f
-  , OpLaxLeftDistributive i1 i2
-  , OpLaxLeftDistributive o1 o2
-  , OpLaxRightDistributive i1 i2
-  , OpLaxRightDistributive o1 o2
+  , OpLaxLDistrib i1 i2
+  , OpLaxLDistrib o1 o2
+  , OpLaxRDistrib i1 i2
+  , OpLaxRDistrib o1 o2
   , Semigroupal i1 (×) Gen
   , Semigroupal i2 (×) Gen
   ) =>
