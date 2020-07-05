@@ -59,9 +59,9 @@ runitbwdid2 = bwdid2 (runit @t)
 pentagon1, pentagon2 ::
   Arrow t ~ (->) =>
   Associative t =>
-  a `t` b `t` c `t` d -> a `t` (b `t` (c `t` d))
-pentagon1 = fwd assoc <<< fwd assoc
-pentagon2 = bimap id (fwd assoc) <<< fwd assoc <<< bimap (fwd assoc) id
+  a `t` (b `t` (c `t` d)) -> a `t` b `t` c `t` d
+pentagon1 = bwd assoc >>> bwd assoc
+pentagon2 = bimap id (bwd assoc) >>> bwd assoc >>> bimap (bwd assoc) id
 
 triangle1, triangle2 ::
   Arrow t ~ (->) =>

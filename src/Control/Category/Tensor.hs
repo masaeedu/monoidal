@@ -15,8 +15,8 @@ type (×) = (,)
 type (+) = Either
 type (⊠) = These
 
-infixl 6 +
-infixl 7 ×
+infixr 6 +
+infixr 7 ×
 
 -- {{{ CLASSES
 

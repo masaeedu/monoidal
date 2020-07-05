@@ -30,14 +30,14 @@ selective :: forall f e a.
 selective lift e a f f2 =
   testGroup "Selective" $
   [ testProperty "Identity" $ property $ do
-      v <- forAll $ lift $ combineF (e, e)
+      v <- forAll $ lift $ e -?- e
       identity1 v === identity2 v
 
   , testProperty "Distributivity" $ property $ do
-      v <- forAllWith (const "whatever") $ combineF (combineF (e, a), combineF (lift f, lift f))
+      v <- forAllWith (const "whatever") $ (e -?- a) -?- lift f -?- lift f
       distributivity1 v === distributivity2 v
 
   , testProperty "Associativity" $ property $ do
-      v <- forAllWith (const "whatever") $ combineF (lift (combineF (e, a)), combineF (lift $ combineF (e, f), lift f2))
+      v <- forAllWith (const "whatever") $ lift (e -?- a) -?- lift (e -?- f) -?- lift f2
       associativity1 @f @e @e @a v === associativity2 v
   ]

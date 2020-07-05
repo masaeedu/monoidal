@@ -18,13 +18,13 @@ identity2 = fmap (either id id)
 
 distributivity1, distributivity2 :: forall f e a.
   Selective f =>
-  (e + a) × (f (e -> a) × f (e -> a)) -> f a
+  (e + a) × f (e -> a) × f (e -> a) -> f a
 distributivity1 (x, (y, z)) = pure x <*? (y *> z)
 distributivity2 (x, (y, z)) = (pure x <*? y) *> (pure x <*? z)
 
 associativity1, associativity2 :: forall f e1 e2 a.
   Selective f =>
-  f (e1 + a) × (f (e2 + (e1 -> a)) × f (e2 -> e1 -> a)) -> f a
+  f (e1 + a) × f (e2 + (e1 -> a)) × f (e2 -> e1 -> a) -> f a
 associativity1 (x, (y, z)) = x <*? (y <*? z)
 associativity2 (x, (y, z)) = (f <$> x) <*? (g <$> y) <*? (h <$> z)
   where

@@ -21,8 +21,10 @@ class
   where
   combineF :: Arrow o (f a `o` f b) (f (a `i` b))
 
-convolve :: Semigroupal t (×) f => f a -> f b -> f (t a b)
-convolve = curry combineF
+(-?-) :: Semigroupal t (×) f => f a -> f b -> f (t a b)
+(-?-) = curry combineF
+
+infixr -?-
 
 class
   ( Associative i

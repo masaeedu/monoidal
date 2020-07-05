@@ -47,7 +47,7 @@ associativity :: forall t u f a.
   ) =>
   (forall x. Gen x -> Gen (f x)) -> Gen a -> Property
 associativity lift g = property $ do
-  v <- forAll $ combineF (combineF (lift g, lift g), lift g)
+  v <- forAll $ (lift g -?- lift g) -?- lift g
   associativity1 @t @u v === associativity2 @t @u v
 
 lunitality :: forall t u f a.
@@ -57,7 +57,7 @@ lunitality :: forall t u f a.
   ) =>
   (forall x. Gen x -> Gen (f x)) -> Gen a -> Property
 lunitality lift g = property $ do
-  v <- forAll $ combineF (unitF @u @(×) (), lift g)
+  v <- forAll $ unitF @u @(×) () -?- lift g
   lunitality1 @t @u v === lunitality2 @t @u v
 
 runitality :: forall t u f a.
@@ -67,7 +67,7 @@ runitality :: forall t u f a.
   ) =>
   (forall x. Gen x -> Gen (f x)) -> Gen a -> Property
 runitality lift g = property $ do
-  v <- forAll $ combineF (lift g, unitF @u @(×) ())
+  v <- forAll $ lift g -?- unitF @u @(×) ()
   runitality1 @t @u v === runitality2 @t @u v
 
 ldistributivity :: forall i1 o1 i2 o2 f a.
@@ -81,7 +81,7 @@ ldistributivity :: forall i1 o1 i2 o2 f a.
   ) =>
   (forall x. Gen x -> Gen (f x)) -> Gen a -> Property
 ldistributivity lift g = property $ do
-  v <- forAll $ combineF (lift g, combineF (lift g, lift g))
+  v <- forAll $ lift g -?- lift g -?- lift g
   ldistributivity1 @i1 @o1 @i2 @o2 v === ldistributivity2 @i1 @o1 @i2 @o2 v
 
 rdistributivity :: forall i1 o1 i2 o2 f a.
@@ -95,7 +95,7 @@ rdistributivity :: forall i1 o1 i2 o2 f a.
   ) =>
   (forall x. Gen x -> Gen (f x)) -> Gen a -> Property
 rdistributivity lift g = property $ do
-  v <- forAll $ combineF (combineF (lift g, lift g), lift g)
+  v <- forAll $ (lift g -?- lift g) -?- lift g
   rdistributivity1 @i1 @o1 @i2 @o2 v === rdistributivity2 @i1 @o1 @i2 @o2 v
 
 symmetry :: forall t u f a.
@@ -107,7 +107,7 @@ symmetry :: forall t u f a.
   ) =>
   (forall x. Gen x -> Gen (f x)) -> Gen a -> Property
 symmetry lift g = property $ do
-  v <- forAll $ combineF (lift g, lift g)
+  v <- forAll $ lift g -?- lift g
   symmetry1 @t @u @f v === symmetry2 @t @u @f v
 
 opassociativity :: forall t u f a.
@@ -117,7 +117,7 @@ opassociativity :: forall t u f a.
   ) =>
   (forall x. Gen x -> Gen (f x)) -> Gen a -> Property
 opassociativity lift g = property $ do
-  v <- forAll $ lift $ combineF (g, combineF (g, g))
+  v <- forAll $ lift $ g -?- g -?- g
   opassociativity1 @t @u v === opassociativity2 @t @u v
 
 oplunitality :: forall t u f a.
@@ -151,7 +151,7 @@ opldistributivity :: forall i1 o1 i2 o2 f a.
   ) =>
   (forall x. Gen x -> Gen (f x)) -> Gen a -> Property
 opldistributivity lift g = property $ do
-  v <- forAll $ lift $ combineF (combineF (g, g), combineF (g, g))
+  v <- forAll $ lift $ (g -?- g) -?- (g -?- g)
   opldistributivity1 @i1 @o1 @i2 @o2 v === opldistributivity2 @i1 @o1 @i2 @o2 v
 
 oprdistributivity :: forall i1 o1 i2 o2 f a.
@@ -165,7 +165,7 @@ oprdistributivity :: forall i1 o1 i2 o2 f a.
   ) =>
   (forall x. Gen x -> Gen (f x)) -> Gen a -> Property
 oprdistributivity lift g = property $ do
-  v <- forAll $ lift $ combineF (combineF (g, g), combineF (g, g))
+  v <- forAll $ lift $ (g -?- g) -?- (g -?- g)
   oprdistributivity1 @i1 @o1 @i2 @o2 v === oprdistributivity2 @i1 @o1 @i2 @o2 v
 
 opsymmetry :: forall t u f a.
@@ -177,5 +177,5 @@ opsymmetry :: forall t u f a.
   ) =>
   (forall x. Gen x -> Gen (f x)) -> Gen a -> Property
 opsymmetry lift g = property $ do
-  v <- forAll $ lift $ combineF (g, g)
+  v <- forAll $ lift $ g -?- g
   opsymmetry1 @t @u @f v === opsymmetry2 @t @u @f v
