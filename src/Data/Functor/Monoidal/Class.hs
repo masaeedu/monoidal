@@ -19,7 +19,7 @@ class
   ) =>
   Semigroupal i o f
   where
-  combineF :: Arrow o (f a `o` f b) (f (a `i` b))
+  combineF :: f a `o` f b -> f (a `i` b)
 
 (-?-) :: Semigroupal t (×) f => f a -> f b -> f (t a b)
 (-?-) = curry combineF
@@ -35,7 +35,7 @@ class
   ) =>
   OpSemigroupal i o f
   where
-  uncombineF :: Arrow o (f (a `i` b)) (f a `o` f b)
+  uncombineF :: f (a `i` b) -> f a `o` f b
 
 type StrongSemigroupal i o f = (Semigroupal i o f, OpSemigroupal i o f)
 
@@ -46,7 +46,7 @@ class
   ) =>
   Monoidal i o f
   where
-  unitF :: Arrow o (Unit o) (f (Unit i))
+  unitF :: Unit o -> f (Unit i)
 
 husk :: forall t f. Monoidal t (×) f => f (Unit t)
 husk = unitF @t @(×) ()
@@ -58,7 +58,7 @@ class
   ) =>
   OpMonoidal i o f
   where
-  discardF :: Arrow o (f (Unit i)) (Unit o)
+  discardF :: f (Unit i) -> Unit o
 
 type StrongMonoidal i o f = (Monoidal i o f, OpMonoidal i o f)
 
