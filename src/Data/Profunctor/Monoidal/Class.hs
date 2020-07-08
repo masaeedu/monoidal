@@ -64,6 +64,16 @@ type Splice = Semigroupal (+) (×) (×)
 
 type Comux   = OpSemigroupal (×) (×) (×)
 type Codemux = OpSemigroupal (+) (+) (×)
+type Trivial = OpSemigroupal (+) (×) (×)
+
+-- Every profunctor has instances of the trivial semigroupal and monoidal constraints
+instance Profunctor p => OpSemigroupal (+) (×) (×) p
+  where
+  uncombineP p = (dimap Left fst p, dimap Right snd p)
+
+instance Profunctor p => OpMonoidal (+) (×) (×) p
+  where
+  discardP = const ()
 
 type Terminal  = Monoidal (×) (×) (×)
 type Initial   = Monoidal (+) (+) (×)
