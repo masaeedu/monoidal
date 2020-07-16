@@ -89,20 +89,20 @@ instance
   ( Tensor i
   , Arrow i ~ (->)
   ) =>
-  OpRStrong i i Identity
+  OpLStrong i i Identity
   where
-  oprstrength =
-    first Identity
+  oplstrength =
+    second Identity
     <<< runIdentity
 
 instance
   ( Tensor i
   , Arrow i ~ (->)
   ) =>
-  OpLStrong i i Identity
+  OpRStrong i i Identity
   where
-  oplstrength =
-    second Identity
+  oprstrength =
+    first Identity
     <<< runIdentity
 
 instance
