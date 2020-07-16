@@ -33,6 +33,30 @@ class
 
 type Strong i o f = (LStrong i o f, RStrong i o f)
 
+class
+  ( Functor f
+  , Tensor i
+  , Tensor o
+  , Arrow i ~ (->)
+  , Arrow o ~ (->)
+  ) =>
+  OpLStrong i o f
+  where
+  oplstrength :: f (i a b) -> o a (f b)
+
+class
+  ( Functor f
+  , Tensor i
+  , Tensor o
+  , Arrow i ~ (->)
+  , Arrow o ~ (->)
+  ) =>
+  OpRStrong i o f
+  where
+  oprstrength :: f (i a b) -> o (f a) b
+
+type OpStrong i o f = (OpLStrong i o f, OpRStrong i o f)
+
 instance {-# OVERLAPPABLE #-} Functor f => LStrong (×) (×) f
   where
   lstrength (a, fb) = fmap (a,) fb

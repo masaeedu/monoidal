@@ -4,6 +4,7 @@ import Control.Applicative (ZipList(..))
 import Control.Category.Tensor
 
 import Data.Functor.Monoidal.Class
+import Data.Functor.Strong.Class
 
 import Data.Bifunctor
 import Data.Void
@@ -13,6 +14,9 @@ decide = uncombineF
 
 refute :: Decisive f => f Void -> Void
 refute = discardF @(+) @(+)
+
+extract :: (Decisive f, OpStrong (+) (+) f) => f a -> a
+extract = unembed @(+) @(+)
 
 instance OpSemigroupal (+) (+) Maybe
   where

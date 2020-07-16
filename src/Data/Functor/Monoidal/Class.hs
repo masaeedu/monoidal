@@ -3,12 +3,16 @@ module Data.Functor.Monoidal.Class where
 
 import Prelude hiding (Applicative(..))
 
+import Control.Category.Iso
 import Control.Category.Tensor
+import Control.Category ((>>>), (<<<))
 
 import Data.Bifunctor
 import Data.Bifunctor.Tannen
 
 import Data.Functor.Compose
+
+import Data.Functor.Strong.Class
 
 class
   ( Associative i
@@ -50,6 +54,20 @@ class
 
 husk :: forall t f. Monoidal t (×) f => f (Unit t)
 husk = unitF @t @(×) ()
+
+embed :: forall i o f a. (Monoidal i o f, Strong i o f) => a -> f a
+embed =
+  bwd runit
+  >>> second (unitF @i @o)
+  >>> lstrength @i @o
+  >>> fmap (fwd runit)
+
+unembed :: forall i o f a. (OpMonoidal i o f, OpStrong i o f) => f a -> a
+unembed =
+  fwd runit
+  <<< second (discardF @i @o)
+  <<< oplstrength @i @o
+  <<< fmap (bwd runit)
 
 class
   ( Tensor i
