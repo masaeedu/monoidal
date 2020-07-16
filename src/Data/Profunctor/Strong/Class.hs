@@ -2,7 +2,8 @@ module Data.Profunctor.Strong.Class where
 
 import Data.Profunctor (Profunctor(..))
 import qualified Data.Profunctor as P
-import Data.Profunctor.Composition
+
+import Data.Profunctor.ProcomposeVia
 
 import Data.Bifunctor
 
@@ -84,14 +85,14 @@ instance
   ( LStrong x o p
   , LStrong i x q
   ) =>
-  LStrong i o (Procompose p q)
+  LStrong i o (ProcomposeVia x p q)
   where
-  lstrength (Procompose p q) = Procompose (lstrength @x p) (lstrength q)
+  lstrength (ProcomposeVia p q) = ProcomposeVia (lstrength @x p) (lstrength q)
 
 instance
   ( RStrong x o p
   , RStrong i x q
   ) =>
-  RStrong i o (Procompose p q)
+  RStrong i o (ProcomposeVia x p q)
   where
-  rstrength (Procompose p q) = Procompose (rstrength @x p) (rstrength q)
+  rstrength (ProcomposeVia p q) = ProcomposeVia (rstrength @x p) (rstrength q)

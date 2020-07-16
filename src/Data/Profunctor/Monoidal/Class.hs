@@ -1,8 +1,13 @@
 module Data.Profunctor.Monoidal.Class where
 
-import Data.Profunctor
+import Data.Profunctor (Profunctor(..))
+import Data.Profunctor.Strong.Class
+import Data.Profunctor.ProcomposeVia
 
+import Control.Category.Iso
 import Control.Category.Tensor
+
+import Data.Bifunctor
 
 class
   ( Associative l
@@ -45,6 +50,12 @@ class
   where
   unitP :: Unit o -> p (Unit l) (Unit r)
 
+diagonal :: forall l r p. Monoidal l r (×) p => p (Unit l) (Unit r)
+diagonal = unitP @l @r @(×) ()
+
+identity :: forall l r p a. (Monoidal l r (×) p, Strong l r p) => p a a
+identity = dimap (bwd $ lunit @l) (fwd $ lunit @r) $ lstrength $ diagonal @l @r
+
 class
   ( Tensor l
   , Tensor r
@@ -79,3 +90,38 @@ type Terminal  = Monoidal (×) (×) (×)
 type Initial   = Monoidal (+) (+) (×)
 type Universal = Monoidal (×) (+) (×)
 type Unique    = Monoidal (+) (×) (×)
+
+instance
+  ( Associative t
+  , Arrow t ~ (->)
+  ) =>
+  Semigroupal t t (×) (->)
+  where
+  combineP = uncurry bimap
+
+instance
+  ( Tensor t
+  , Arrow t ~ (->)
+  ) =>
+  Monoidal t t (×) (->)
+  where
+  unitP = const id
+
+instance
+  ( Semigroupal x b (×) p
+  , Semigroupal a x (×) q
+  ) =>
+  Semigroupal a b (×) (ProcomposeVia x p q)
+  where
+  combineP (ProcomposeVia a1 b1, ProcomposeVia a2 b2) =
+    ProcomposeVia
+      (combineP @x @b $ (a1, a2))
+      (combineP @a @x $ (b1, b2))
+
+instance
+  ( Monoidal x b (×) p
+  , Monoidal a x (×) q
+  ) =>
+  Monoidal a b (×) (ProcomposeVia x p q)
+  where
+  unitP = const $ ProcomposeVia (diagonal @x @b) (diagonal @a @x)
