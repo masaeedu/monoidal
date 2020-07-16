@@ -57,11 +57,11 @@ class
 
 type OpStrong i o f = (OpLStrong i o f, OpRStrong i o f)
 
-instance {-# OVERLAPPABLE #-} Functor f => LStrong (×) (×) f
+instance {-# INCOHERENT #-} Functor f => LStrong (×) (×) f
   where
   lstrength (a, fb) = fmap (a,) fb
 
-instance {-# OVERLAPPABLE #-} Functor f => RStrong (×) (×) f
+instance {-# INCOHERENT #-} Functor f => RStrong (×) (×) f
   where
   rstrength (fa, b) = fmap (,b) fa
 
