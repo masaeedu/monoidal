@@ -1,11 +1,11 @@
 {-# LANGUAGE TupleSections #-}
 module Data.Functor.Strong.Class where
 
-import Control.Category ((>>>))
+import Control.Category ((>>>), (<<<))
 import Control.Category.Tensor
 
 import Data.Functor.Identity
-import Data.Functor.Compose
+import Data.Functor.ComposeVia
 
 import Data.Bifunctor
 
@@ -86,25 +86,69 @@ instance
     >>> Identity
 
 instance
+  ( Tensor i
+  , Arrow i ~ (->)
+  ) =>
+  OpRStrong i i Identity
+  where
+  oprstrength =
+    first Identity
+    <<< runIdentity
+
+instance
+  ( Tensor i
+  , Arrow i ~ (->)
+  ) =>
+  OpLStrong i i Identity
+  where
+  oplstrength =
+    second Identity
+    <<< runIdentity
+
+instance
   ( LStrong x o f
   , LStrong i x g
   ) =>
-  LStrong i o (Compose f g)
+  LStrong i o (ComposeVia x f g)
   where
   lstrength =
-    second getCompose
+    second getComposeVia
     >>> lstrength @x @o
     >>> fmap lstrength
-    >>> Compose
+    >>> ComposeVia
 
 instance
   ( RStrong x o f
   , RStrong i x g
   ) =>
-  RStrong i o (Compose f g)
+  RStrong i o (ComposeVia x f g)
   where
   rstrength =
-    first getCompose
+    first getComposeVia
     >>> rstrength @x @o
     >>> fmap rstrength
-    >>> Compose
+    >>> ComposeVia
+
+instance
+  ( OpLStrong x o f
+  , OpLStrong i x g
+  ) =>
+  OpLStrong i o (ComposeVia x f g)
+  where
+  oplstrength =
+    second ComposeVia
+    <<< oplstrength @x @o
+    <<< fmap oplstrength
+    <<< getComposeVia
+
+instance
+  ( OpRStrong x o f
+  , OpRStrong i x g
+  ) =>
+  OpRStrong i o (ComposeVia x f g)
+  where
+  oprstrength =
+    first ComposeVia
+    <<< oprstrength @x @o
+    <<< fmap oprstrength
+    <<< getComposeVia

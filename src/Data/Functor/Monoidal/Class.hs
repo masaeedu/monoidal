@@ -10,7 +10,8 @@ import Control.Category ((>>>), (<<<))
 import Data.Bifunctor
 import Data.Bifunctor.Tannen
 
-import Data.Functor.Compose
+import Data.Functor.Identity
+import Data.Functor.ComposeVia
 
 import Data.Functor.Strong.Class
 
@@ -96,8 +97,65 @@ type Select f = (Functor f, forall a. Apply (Tannen f (+) a))
 type Selective f = (Applicative f, Select f)
 
 instance
+  ( Associative t
+  , Arrow t ~ (->)
+  ) =>
+  Semigroupal t t Identity
+  where
+  combineF = Identity . bimap runIdentity runIdentity
+
+instance
+  ( Tensor t
+  , Arrow t ~ (->)
+  ) =>
+  Monoidal t t Identity
+  where
+  unitF = Identity
+
+instance
+  ( Associative t
+  , Arrow t ~ (->)
+  ) =>
+  OpSemigroupal t t Identity
+  where
+  uncombineF = bimap Identity Identity . runIdentity
+
+instance
+  ( Tensor t
+  , Arrow t ~ (->)
+  ) =>
+  OpMonoidal t t Identity
+  where
+  discardF = runIdentity
+
+instance
   ( Semigroupal b c f
   , Semigroupal a b g
-  ) => Semigroupal a c (Compose f g)
+  ) =>
+  Semigroupal a c (ComposeVia b f g)
   where
-  combineF = Compose . fmap combineF . combineF @b @c . bimap getCompose getCompose
+  combineF = ComposeVia . fmap combineF . combineF @b @c . bimap getComposeVia getComposeVia
+
+instance
+  ( Monoidal b c f
+  , Monoidal a b g
+  ) =>
+  Monoidal a c (ComposeVia b f g)
+  where
+  unitF = ComposeVia . fmap (unitF @a @b) . unitF @b @c
+
+instance
+  ( OpSemigroupal b c f
+  , OpSemigroupal a b g
+  ) =>
+  OpSemigroupal a c (ComposeVia b f g)
+  where
+  uncombineF = bimap ComposeVia ComposeVia . uncombineF @b @c . fmap uncombineF . getComposeVia
+
+instance
+  ( OpMonoidal b c f
+  , OpMonoidal a b g
+  ) =>
+  OpMonoidal a c (ComposeVia b f g)
+  where
+  discardF = discardF @b @c . fmap (discardF @a @b) . getComposeVia
