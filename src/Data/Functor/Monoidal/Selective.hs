@@ -10,7 +10,6 @@ import Data.Functor.Monoidal.Class
 import Data.Functor.Monoidal.Applicative
 import Data.Functor.Monoidal.Decisive
 
-import Data.Bifunctor
 import Data.Bifunctor.Tannen
 
 flipTannen :: (Functor f, Symmetric t, Arrow t ~ (->)) => Tannen f t a b -> Tannen f t b a

@@ -8,8 +8,6 @@ import Data.Functor.Monoidal.Class
 import Data.Functor.Monoidal.Applicative
 import Data.Functor.Monoidal.Selective
 
-import Data.Bifunctor
-
 identity1, identity2 :: forall f e.
   Selective f =>
   f (e + e) -> f e

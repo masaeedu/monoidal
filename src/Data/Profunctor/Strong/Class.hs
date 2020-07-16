@@ -5,8 +5,6 @@ import qualified Data.Profunctor as P
 
 import Data.Profunctor.ProcomposeVia
 
-import Data.Bifunctor
-
 import Control.Category.Tensor
 
 -- The basic idea of strength is taken from http://www.cse.chalmers.se/~rjmh/Papers/arrows.pdf

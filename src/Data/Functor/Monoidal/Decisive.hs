@@ -6,7 +6,6 @@ import Control.Category.Tensor
 import Data.Functor.Monoidal.Class
 import Data.Functor.Strong.Class
 
-import Data.Bifunctor
 import Data.Void
 
 decide :: Decide f => f (a + b) -> f a + f b

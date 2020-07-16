@@ -3,7 +3,6 @@ module Data.Profunctor.Monoidal.Mux where
 import Control.Category.Tensor hiding (Arrow)
 import Control.Arrow
 
-import Data.Bifunctor
 import Data.Bifunctor.Joker
 
 import Data.Profunctor

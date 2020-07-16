@@ -7,8 +7,6 @@ import Control.Category.Iso
 
 import Data.Functor.Monoidal.Class
 
-import Data.Bifunctor
-
 associativity1, associativity2 :: forall t u f a b c.
   Semigroupal t u f =>
   f a `u` f b `u` f c -> f (a `t` (b `t` c))

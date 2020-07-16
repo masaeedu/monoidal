@@ -7,8 +7,6 @@ import Data.Profunctor.ProcomposeVia
 import Control.Category.Iso
 import Control.Category.Tensor
 
-import Data.Bifunctor
-
 class
   ( Associative l
   , Associative r

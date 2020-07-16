@@ -7,8 +7,6 @@ import Control.Category.Tensor
 import Data.Functor.Identity
 import Data.Functor.ComposeVia
 
-import Data.Bifunctor
-
 class
   ( Functor f
   , Tensor i

@@ -8,8 +8,6 @@ import Control.Category.Tensor
 import Control.Category.Iso
 import Control.Category.Iso.Laws
 
-import Data.Bifunctor
-
 assocfwdid1, assocfwdid2 ::
   Arrow t ~ p =>
   Associative t  =>

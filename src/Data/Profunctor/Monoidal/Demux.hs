@@ -2,7 +2,6 @@ module Data.Profunctor.Monoidal.Demux where
 
 import Control.Category.Tensor
 
-import Data.Bifunctor
 import Data.Bifunctor.Joker
 
 import Data.Profunctor

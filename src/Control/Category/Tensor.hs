@@ -3,7 +3,7 @@ module Control.Category.Tensor where
 
 import Prelude hiding ((.), id)
 
-import Data.Bifunctor
+import qualified Data.Bifunctor as B
 import Data.Void
 import Data.These
 import Data.These.Combinators
@@ -22,11 +22,18 @@ infixr 7 ×
 
 class
   ( Category (Arrow t)
-  , Bifunctor t
   ) =>
-  Structure t
+  Structure (t :: k -> k -> k)
   where
-  type Arrow t :: * -> * -> *
+  type Arrow t :: k -> k -> *
+
+  bimap :: Arrow t a b -> Arrow t c d -> Arrow t (t a c) (t b d)
+
+first :: Structure t => Arrow t a b -> Arrow t (t a x) (t b x)
+first = flip bimap id
+
+second :: Structure t => Arrow t a b -> Arrow t (t x a) (t x b)
+second = bimap id
 
 class Structure t => Associative t
   where
@@ -108,14 +115,17 @@ type Rig times plus = (LRig times plus, RRig times plus)
 instance Structure (×)
   where
   type Arrow (×) = (->)
+  bimap = B.bimap
 
 instance Structure (+)
   where
   type Arrow (+) = (->)
+  bimap = B.bimap
 
 instance Structure (⊠)
   where
   type Arrow (⊠) = (->)
+  bimap = B.bimap
 
 -- }}}
 

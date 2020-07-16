@@ -5,8 +5,6 @@ import Data.Void
 import Control.Category.ProductCategory
 import Control.Category.Tensor
 
-import Data.Bifunctor
-
 import Data.Biprofunctor
 import Data.Biprofunctor.Monoidal.Class
 

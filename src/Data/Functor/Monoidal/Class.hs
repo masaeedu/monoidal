@@ -7,7 +7,6 @@ import Control.Category.Iso
 import Control.Category.Tensor
 import Control.Category ((>>>), (<<<))
 
-import Data.Bifunctor
 import Data.Bifunctor.Tannen
 
 import Data.Functor.Identity

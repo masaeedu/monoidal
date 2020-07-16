@@ -6,8 +6,6 @@ import Control.Category.Tensor
 
 import Data.Functor.Monoidal.Class
 
-import Data.Bifunctor
-
 partition :: Filter f => f (a + b) -> f a × f b
 partition = uncombineF
 
