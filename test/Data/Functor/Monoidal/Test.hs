@@ -1,3 +1,4 @@
+{-# LANGUAGE ImpredicativeTypes #-}
 module Data.Functor.Monoidal.Test where
 
 import Test.Tasty

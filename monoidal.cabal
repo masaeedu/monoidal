@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.31.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 316518ff842d2c2c74e89ee22014dd9f10566ba9770d04e95ff926dd54b06c40
+-- hash: 4c8535c8de7e8177827b5ca64dbfa68edd9012b9efa3db374cd1cfb6ad98f426
 
 name:           monoidal
 version:        0.0.0
@@ -50,7 +50,7 @@ library
   default-extensions: GADTs StandaloneDeriving DeriveFunctor DerivingVia GeneralizedNewtypeDeriving ScopedTypeVariables RankNTypes QuantifiedConstraints TypeApplications TypeOperators MultiParamTypeClasses ConstraintKinds DataKinds PolyKinds KindSignatures UndecidableInstances UndecidableSuperClasses FlexibleInstances FlexibleContexts DefaultSignatures TypeFamilies TypeFamilyDependencies AllowAmbiguousTypes
   ghc-options: -Wall -Wno-orphans -fprint-potential-instances
   build-depends:
-      base >=4.12 && <4.13
+      base >=4.13 && <4.14
     , bifunctors
     , hedgehog
     , profunctors
@@ -103,7 +103,7 @@ test-suite monoidal-test
   default-extensions: GADTs StandaloneDeriving DeriveFunctor DerivingVia GeneralizedNewtypeDeriving ScopedTypeVariables RankNTypes QuantifiedConstraints TypeApplications TypeOperators MultiParamTypeClasses ConstraintKinds DataKinds PolyKinds KindSignatures UndecidableInstances UndecidableSuperClasses FlexibleInstances FlexibleContexts DefaultSignatures TypeFamilies TypeFamilyDependencies AllowAmbiguousTypes
   ghc-options: -Wall -Wno-orphans -fprint-potential-instances
   build-depends:
-      base >=4.12 && <4.13
+      base >=4.13 && <4.14
     , bifunctors
     , hedgehog
     , monoidal

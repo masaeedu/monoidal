@@ -1,3 +1,4 @@
+{-# LANGUAGE ImpredicativeTypes #-}
 module Control.Category.Tensor.Test where
 
 import Test.Tasty

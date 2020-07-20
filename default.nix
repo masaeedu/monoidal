@@ -1,9 +1,10 @@
 let
   sources = import ./nix/sources.nix;
-  compilerVersion = "ghc865";
-  pkgs = (import sources.iohk-nixpkgs) (import sources.iohk-hnix);
+  compilerVersion = "ghc883";
+  hnix = import sources.iohk-hnix {};
+  pkgs = (import hnix.sources.nixpkgs-2003) hnix.nixpkgsArgs;
 in
 pkgs.haskell-nix.cabalProject {
   src = pkgs.haskell-nix.haskellLib.cleanGit { src = ./.; };
-  ghc = pkgs.buildPackages.pkgs.haskell-nix.compiler.${compilerVersion};
+  compiler-nix-name = compilerVersion;
 }

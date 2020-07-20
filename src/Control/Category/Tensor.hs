@@ -25,9 +25,12 @@ infixr 7 ×
 class NoThanks a
 instance NoThanks a
 
+class ob (t x y) => Wat ob t x y
+instance ob (t x y) => Wat ob t x y
+
 class
   ( Category (Arrow t)
-  , forall ob. Ask t ~ ob => forall x y. (ob x, ob y) => ob (t x y)
+  , forall ob x y. (Ask t ~ ob, ob x, ob y) => Wat ob t x y
   ) => Structure (t :: k -> k -> k)
   where
 

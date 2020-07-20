@@ -1,4 +1,4 @@
-{-# LANGUAGE PartialTypeSignatures, TupleSections #-}
+{-# LANGUAGE PartialTypeSignatures, TupleSections, ImpredicativeTypes #-}
 module Data.Functor.Monoidal.Selective.Laws where
 
 import Prelude hiding (Applicative(..), (*>))

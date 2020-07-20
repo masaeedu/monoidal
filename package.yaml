@@ -8,7 +8,7 @@ build-type: Simple
 
 source-dirs: src
 dependencies:
-  - { name: "base", version: ">=4.12 && <4.13" }
+  - { name: "base", version: ">=4.13 && <4.14" }
   - bifunctors
   - profunctors
   - these

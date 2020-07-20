@@ -1,4 +1,4 @@
-{-# LANGUAGE LambdaCase, TupleSections #-}
+{-# LANGUAGE LambdaCase, TupleSections, ImpredicativeTypes #-}
 module Data.Functor.Monoidal.Selective where
 
 import Prelude hiding (Applicative(..), zip)

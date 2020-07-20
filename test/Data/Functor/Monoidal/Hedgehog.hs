@@ -1,3 +1,4 @@
+{-# LANGUAGE ImpredicativeTypes #-}
 module Data.Functor.Monoidal.Hedgehog where
 
 import Control.Category.Tensor.Hask
