@@ -73,7 +73,7 @@ runit = runit'
 
 type Tensor t = (Associative t, Unital t)
 
-type Bistructure t p = (Structure t, Structure p, Arrow t ~ Arrow p, Ask t ~ Ask p)
+type Bistructure t u = (Structure t, Structure u, Arrow t ~ Arrow u, Ask t ~ Ask u)
 
 class Bistructure times plus => LaxLDistrib times plus
   where
