@@ -1,0 +1,114 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 316518ff842d2c2c74e89ee22014dd9f10566ba9770d04e95ff926dd54b06c40
+
+name:           monoidal
+version:        0.0.0
+author:         Asad Saeeduddin
+maintainer:     masaeedu@gmail.com
+license:        MIT
+build-type:     Simple
+
+library
+  exposed-modules:
+      Control.Category.Iso
+      Control.Category.Iso.Laws
+      Control.Category.ProductCategory
+      Control.Category.Tensor
+      Control.Category.Tensor.Hask
+      Control.Category.Tensor.Laws
+      Data.Biprofunctor
+      Data.Biprofunctor.Monoidal.Class
+      Data.Biprofunctor.Re
+      Data.Functor.ComposeVia
+      Data.Functor.Monoidal.Alignable
+      Data.Functor.Monoidal.Alternative
+      Data.Functor.Monoidal.Applicative
+      Data.Functor.Monoidal.Class
+      Data.Functor.Monoidal.Decisive
+      Data.Functor.Monoidal.Filterable
+      Data.Functor.Monoidal.Grid
+      Data.Functor.Monoidal.Laws
+      Data.Functor.Monoidal.Selective
+      Data.Functor.Monoidal.Selective.Laws
+      Data.Functor.Strong.Class
+      Data.Profunctor.Monoidal.Class
+      Data.Profunctor.Monoidal.Demux
+      Data.Profunctor.Monoidal.Mux
+      Data.Profunctor.Monoidal.Splice
+      Data.Profunctor.Monoidal.Switch
+      Data.Profunctor.ProcomposeVia
+      Data.Profunctor.Strong.Class
+  other-modules:
+      Paths_monoidal
+  hs-source-dirs:
+      src
+  default-extensions: GADTs StandaloneDeriving DeriveFunctor DerivingVia GeneralizedNewtypeDeriving ScopedTypeVariables RankNTypes QuantifiedConstraints TypeApplications TypeOperators MultiParamTypeClasses ConstraintKinds DataKinds PolyKinds KindSignatures UndecidableInstances UndecidableSuperClasses FlexibleInstances FlexibleContexts DefaultSignatures TypeFamilies TypeFamilyDependencies AllowAmbiguousTypes
+  ghc-options: -Wall -Wno-orphans -fprint-potential-instances
+  build-depends:
+      base >=4.12 && <4.13
+    , bifunctors
+    , hedgehog
+    , profunctors
+    , tasty
+    , tasty-hedgehog
+    , these
+  default-language: Haskell2010
+
+test-suite monoidal-test
+  type: exitcode-stdio-1.0
+  main-is: Main.hs
+  other-modules:
+      Control.Category.Iso
+      Control.Category.Iso.Laws
+      Control.Category.ProductCategory
+      Control.Category.Tensor
+      Control.Category.Tensor.Hask
+      Control.Category.Tensor.Laws
+      Data.Biprofunctor
+      Data.Biprofunctor.Monoidal.Class
+      Data.Biprofunctor.Re
+      Data.Functor.ComposeVia
+      Data.Functor.Monoidal.Alignable
+      Data.Functor.Monoidal.Alternative
+      Data.Functor.Monoidal.Applicative
+      Data.Functor.Monoidal.Class
+      Data.Functor.Monoidal.Decisive
+      Data.Functor.Monoidal.Filterable
+      Data.Functor.Monoidal.Grid
+      Data.Functor.Monoidal.Laws
+      Data.Functor.Monoidal.Selective
+      Data.Functor.Monoidal.Selective.Laws
+      Data.Functor.Strong.Class
+      Data.Profunctor.Monoidal.Class
+      Data.Profunctor.Monoidal.Demux
+      Data.Profunctor.Monoidal.Mux
+      Data.Profunctor.Monoidal.Splice
+      Data.Profunctor.Monoidal.Switch
+      Data.Profunctor.ProcomposeVia
+      Data.Profunctor.Strong.Class
+      Control.Category.Tensor.Test
+      Data.Functor.Monoidal.Hedgehog
+      Data.Functor.Monoidal.Selective.Test
+      Data.Functor.Monoidal.Test
+      Hedgehog.Extra
+      Paths_monoidal
+  hs-source-dirs:
+      src
+      test
+  default-extensions: GADTs StandaloneDeriving DeriveFunctor DerivingVia GeneralizedNewtypeDeriving ScopedTypeVariables RankNTypes QuantifiedConstraints TypeApplications TypeOperators MultiParamTypeClasses ConstraintKinds DataKinds PolyKinds KindSignatures UndecidableInstances UndecidableSuperClasses FlexibleInstances FlexibleContexts DefaultSignatures TypeFamilies TypeFamilyDependencies AllowAmbiguousTypes
+  ghc-options: -Wall -Wno-orphans -fprint-potential-instances
+  build-depends:
+      base >=4.12 && <4.13
+    , bifunctors
+    , hedgehog
+    , monoidal
+    , profunctors
+    , tasty
+    , tasty-hedgehog
+    , these
+  default-language: Haskell2010
