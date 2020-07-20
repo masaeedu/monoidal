@@ -8,63 +8,87 @@ import Control.Category.Tensor
 import Control.Category.Iso
 import Control.Category.Iso.Laws
 
+import GHC.Exts
+
 assocfwdid1, assocfwdid2 ::
-  Arrow t ~ p =>
-  Associative t  =>
+  ( Arrow t ~ p
+  , Associative t
+  , Ask t a, Ask t b, Ask t c
+  ) =>
   (a `t` b `t` c) `p` (a `t` b `t` c)
 assocfwdid1 = fwdid1 assoc
 assocfwdid2 = fwdid2 assoc
 
 assocbwdid1, assocbwdid2 ::
-  Arrow t ~ p =>
-  Associative t  =>
+  ( Arrow t ~ p
+  , Associative t
+  , Ask t a, Ask t b, Ask t c
+  ) =>
   (a `t` (b `t` c)) `p` (a `t` (b `t` c))
 assocbwdid1 = bwdid1 assoc
 assocbwdid2 = bwdid2 assoc
 
 lunitfwdid1, lunitfwdid2 ::
-  Arrow t ~ p =>
-  Unit t ~ i =>
-  Unital t =>
+  ( Arrow t ~ p
+  , Unit t ~ i
+  , Unital t
+  , Ask t a
+  ) =>
   (i `t` a) `p` (i `t` a)
 lunitfwdid1 = fwdid1 lunit
 lunitfwdid2 = fwdid2 lunit
 
 lunitbwdid1, lunitbwdid2 :: forall t a p i.
-  Arrow t ~ p =>
-  Unit t ~ i =>
-  Unital t =>
+  ( Arrow t ~ p
+  , Unit t ~ i
+  , Unital t
+  , Ask t a
+  ) =>
   a `p` a
 lunitbwdid1 = bwdid1 (lunit @t)
 lunitbwdid2 = bwdid2 (lunit @t)
 
 runitfwdid1, runitfwdid2 ::
-  Arrow t ~ p =>
-  Unit t ~ i =>
-  Unital t =>
+  ( Arrow t ~ p
+  , Unit t ~ i
+  , Unital t
+  , Ask t a
+  ) =>
   (a `t` i) `p` (a `t` i)
 runitfwdid1 = fwdid1 runit
 runitfwdid2 = fwdid2 runit
 
 runitbwdid1, runitbwdid2 :: forall t a p i.
-  Arrow t ~ p =>
-  Unit t ~ i =>
-  Unital t =>
+  ( Arrow t ~ p
+  , Unit t ~ i
+  , Unital t
+  , Ask t a
+  ) =>
   a `p` a
 runitbwdid1 = bwdid1 (runit @t)
 runitbwdid2 = bwdid2 (runit @t)
 
+type Entails2 c t = (forall x y. (c x, c y) => c (t x y) :: Constraint)
+
 pentagon1, pentagon2 ::
-  Arrow t ~ (->) =>
-  Associative t =>
-  a `t` (b `t` (c `t` d)) -> a `t` b `t` c `t` d
+  ( Arrow t ~ p
+  , Associative t
+  , Ask t a, Ask t b, Ask t c, Ask t d
+  , Ask t ~ ob
+  , (forall x y. (ob x, ob y) => ob (t x y))
+  ) =>
+  (a `t` (b `t` (c `t` d))) `p` (a `t` b `t` c `t` d)
 pentagon1 = bwd assoc >>> bwd assoc
 pentagon2 = bimap id (bwd assoc) >>> bwd assoc >>> bimap (bwd assoc) id
 
 triangle1, triangle2 ::
-  Arrow t ~ (->) =>
-  Unit t ~ i =>
-  Tensor t =>
-  a `t` (i `t` b) -> a `t` b
+  ( Arrow t ~ p
+  , Unit t ~ i
+  , Tensor t
+  , Ask t a, Ask t b
+  , Ask t ~ ob
+  , (forall x y. (ob x, ob y) => ob (t x y))
+  ) =>
+  (a `t` (i `t` b)) `p` (a `t` b)
 triangle1 = bimap id (fwd lunit)
 triangle2 = bimap (fwd runit) id <<< bwd assoc

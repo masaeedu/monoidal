@@ -2,7 +2,7 @@
 module Data.Functor.Strong.Class where
 
 import Control.Category ((>>>), (<<<))
-import Control.Category.Tensor
+import Control.Category.Tensor.Hask
 
 import Data.Functor.Identity
 import Data.Functor.ComposeVia
@@ -11,8 +11,6 @@ class
   ( Functor f
   , Tensor i
   , Tensor o
-  , Arrow i ~ (->)
-  , Arrow o ~ (->)
   ) =>
   LStrong i o f
   where
@@ -22,8 +20,6 @@ class
   ( Functor f
   , Tensor i
   , Tensor o
-  , Arrow i ~ (->)
-  , Arrow o ~ (->)
   ) =>
   RStrong i o f
   where
@@ -35,8 +31,6 @@ class
   ( Functor f
   , Tensor i
   , Tensor o
-  , Arrow i ~ (->)
-  , Arrow o ~ (->)
   ) =>
   OpLStrong i o f
   where
@@ -46,8 +40,6 @@ class
   ( Functor f
   , Tensor i
   , Tensor o
-  , Arrow i ~ (->)
-  , Arrow o ~ (->)
   ) =>
   OpRStrong i o f
   where
@@ -64,9 +56,7 @@ instance {-# INCOHERENT #-} Functor f => RStrong (×) (×) f
   rstrength (fa, b) = fmap (,b) fa
 
 instance
-  ( Tensor i
-  , Arrow i ~ (->)
-  ) =>
+  Tensor i =>
   LStrong i i Identity
   where
   lstrength =
@@ -75,7 +65,6 @@ instance
 
 instance
   ( Tensor i
-  , Arrow i ~ (->)
   ) =>
   RStrong i i Identity
   where
@@ -85,7 +74,6 @@ instance
 
 instance
   ( Tensor i
-  , Arrow i ~ (->)
   ) =>
   OpLStrong i i Identity
   where
@@ -94,9 +82,7 @@ instance
     <<< runIdentity
 
 instance
-  ( Tensor i
-  , Arrow i ~ (->)
-  ) =>
+  Tensor i =>
   OpRStrong i i Identity
   where
   oprstrength =

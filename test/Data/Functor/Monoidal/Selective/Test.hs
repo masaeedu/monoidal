@@ -1,4 +1,3 @@
-{-# LANGUAGE ImpredicativeTypes #-}
 module Data.Functor.Monoidal.Selective.Test where
 
 import Test.Tasty
@@ -7,12 +6,15 @@ import Test.Tasty.Hedgehog
 import Hedgehog hiding (Eq1, Show1)
 import Hedgehog.Extra
 
-import Control.Category.Tensor
+import Control.Category.Tensor.Hask
 
 import Data.Functor.Monoidal.Class
 import Data.Functor.Monoidal.Selective.Laws
 import Data.Functor.Monoidal.Alternative ()
 import Data.Functor.Monoidal.Selective ()
+
+ensure :: forall c a. c => a -> a
+ensure = id
 
 selective :: forall f e a.
   ( Selective f

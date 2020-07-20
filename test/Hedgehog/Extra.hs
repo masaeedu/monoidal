@@ -3,12 +3,11 @@ module Hedgehog.Extra where
 
 import GHC.Exts
 
+type Lift1 c f = (forall x. c x => c (f x) :: Constraint)
+type Lift2 c t = (forall x y. (c x, c y) => c (t x y) :: Constraint)
+
 type Testable a = (Eq a, Show a)
 
-type Eq1 f = (forall x. Eq x => Eq (f x) :: Constraint)
-type Show1 f = (forall x. Show x => Show (f x) :: Constraint)
-type Testable1 f = (Eq1 f, Show1 f)
+type Testable1 f = (Lift1 Eq f, Lift1 Show f)
 
-type Eq2 t = (forall x y. (Eq x, Eq y) => Eq (t x y) :: Constraint)
-type Show2 t = (forall x y. (Show x, Show y) => Show (t x y) :: Constraint)
-type Testable2 t = (Eq2 t, Show2 t)
+type Testable2 t = (Lift2 Eq t, Lift2 Show t)

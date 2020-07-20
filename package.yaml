@@ -39,6 +39,7 @@ default-extensions:
   - KindSignatures
 
   - UndecidableInstances
+  - UndecidableSuperClasses
   - FlexibleInstances
   - FlexibleContexts
   - DefaultSignatures

@@ -5,15 +5,12 @@ import Data.Profunctor.Strong.Class
 import Data.Profunctor.ProcomposeVia
 
 import Control.Category.Iso
-import Control.Category.Tensor
+import Control.Category.Tensor.Hask
 
 class
   ( Associative l
   , Associative r
   , Associative o
-  , Arrow l ~ (->)
-  , Arrow r ~ (->)
-  , Arrow o ~ (->)
   , Profunctor p
   ) =>
   Semigroupal l r o p
@@ -27,9 +24,6 @@ class
   ( Associative l
   , Associative r
   , Associative o
-  , Arrow l ~ (->)
-  , Arrow r ~ (->)
-  , Arrow o ~ (->)
   , Profunctor p
   ) =>
   OpSemigroupal l r o p
@@ -90,17 +84,13 @@ type Universal = Monoidal (×) (+) (×)
 type Unique    = Monoidal (+) (×) (×)
 
 instance
-  ( Associative t
-  , Arrow t ~ (->)
-  ) =>
+  Associative t =>
   Semigroupal t t (×) (->)
   where
   combineP = uncurry bimap
 
 instance
-  ( Tensor t
-  , Arrow t ~ (->)
-  ) =>
+  Tensor t =>
   Monoidal t t (×) (->)
   where
   unitP = const id

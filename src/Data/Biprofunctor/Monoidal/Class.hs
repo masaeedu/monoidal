@@ -1,6 +1,6 @@
 module Data.Biprofunctor.Monoidal.Class where
 
-import Control.Category.Tensor
+import Control.Category.Tensor.Hask
 import Data.Biprofunctor
 
 class
@@ -9,11 +9,6 @@ class
   , Associative t3
   , Associative t4
   , Associative o
-  , Arrow t1 ~ (->)
-  , Arrow t2 ~ (->)
-  , Arrow t3 ~ (->)
-  , Arrow t4 ~ (->)
-  , Arrow o ~ (->)
   , Biprofunctor bp
   ) =>
   Semigroupal t1 t2 t3 t4 o bp

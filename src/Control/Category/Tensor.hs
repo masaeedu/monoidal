@@ -11,6 +11,8 @@ import Data.These.Combinators
 import Control.Category
 import Control.Category.Iso
 
+import GHC.Exts
+
 type (×) = (,)
 type (+) = Either
 type (⊠) = These
@@ -20,45 +22,58 @@ infixr 7 ×
 
 -- {{{ CLASSES
 
+class NoThanks a
+instance NoThanks a
+
 class
   ( Category (Arrow t)
-  ) =>
-  Structure (t :: k -> k -> k)
+  , forall ob. Ask t ~ ob => forall x y. (ob x, ob y) => ob (t x y)
+  ) => Structure (t :: k -> k -> k)
   where
+
   type Arrow t :: k -> k -> *
 
-  bimap :: Arrow t a b -> Arrow t c d -> Arrow t (t a c) (t b d)
+  type Ask t :: k -> Constraint
+  type Ask t = NoThanks
 
-first :: Structure t => Arrow t a b -> Arrow t (t a x) (t b x)
+  bimap :: (Ask t a, Ask t b, Ask t c, Ask t d) => Arrow t a b -> Arrow t c d -> Arrow t (t a c) (t b d)
+
+first :: (Structure t, Ask t a, Ask t b, Ask t x) => Arrow t a b -> Arrow t (t a x) (t b x)
 first = flip bimap id
 
-second :: Structure t => Arrow t a b -> Arrow t (t x a) (t x b)
+second :: (Structure t, Ask t a, Ask t b, Ask t x) => Arrow t a b -> Arrow t (t x a) (t x b)
 second = bimap id
 
 class Structure t => Associative t
   where
-  assoc :: Iso (Arrow t) ((x `t` y) `t` z) (x `t` (y `t` z))
+  assoc :: (Ask t x, Ask t y, Ask t z) => Iso (Arrow t) ((x `t` y) `t` z) (x `t` (y `t` z))
 
 class Structure t => Braided t
   where
-  braid :: Iso (Arrow t) (x `t` y) (y `t` x)
+  braid :: (Ask t x, Ask t y) => Iso (Arrow t) (x `t` y) (y `t` x)
 
-  default braid :: Symmetric t => Iso (Arrow t) (x `t` y) (y `t` x)
+  default braid :: (Ask t x, Ask t y, Symmetric t) => Iso (Arrow t) (x `t` y) (y `t` x)
   braid = Iso symm symm
 
 class Braided t => Symmetric t
   where
-  symm :: Arrow t (x `t` y) (y `t` x)
+  symm :: (Ask t x, Ask t y) => Arrow t (x `t` y) (y `t` x)
 
-class Structure t => Unital t
+class (Structure t, Ask t (Unit t)) => Unital (t :: k -> k -> k)
   where
-  type Unit t :: *
-  lunit :: Iso (Arrow t) (t (Unit t) x) x
-  runit :: Iso (Arrow t) (t x (Unit t)) x
+  type Unit t :: k
+  lunit' :: Ask t x => Iso (Arrow t) (t (Unit t) x) x
+  runit' :: Ask t x => Iso (Arrow t) (t x (Unit t)) x
+
+lunit :: forall t x. (Unital t, Ask t x) => Iso (Arrow t) (t (Unit t) x) x
+lunit = lunit'
+
+runit :: forall t x. (Unital t, Ask t x) => Iso (Arrow t) (t x (Unit t)) x
+runit = runit'
 
 type Tensor t = (Associative t, Unital t)
 
-type Bistructure t p = (Structure t, Structure p, Arrow t ~ Arrow p)
+type Bistructure t p = (Structure t, Structure p, Arrow t ~ Arrow p, Ask t ~ Ask p)
 
 class Bistructure times plus => LaxLDistrib times plus
   where
@@ -175,20 +190,20 @@ instance Symmetric (⊠)
 instance Unital (×)
   where
   type Unit (×) = ()
-  lunit = Iso snd ((), )
-  runit = Iso fst (, ())
+  lunit' = Iso snd ((), )
+  runit' = Iso fst (, ())
 
 instance Unital (+)
   where
   type Unit (+) = Void
-  lunit = Iso (either absurd id) Right
-  runit = Iso (either id absurd) Left
+  lunit' = Iso (either absurd id) Right
+  runit' = Iso (either id absurd) Left
 
 instance Unital (⊠)
   where
   type Unit (⊠) = Void
-  lunit = Iso (these absurd id absurd) That
-  runit = Iso (these id absurd (const absurd)) This
+  lunit' = Iso (these absurd id absurd) That
+  runit' = Iso (these id absurd (const absurd)) This
 
 -- }}}
 

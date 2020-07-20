@@ -24,8 +24,7 @@ associativity1, associativity2 :: forall f e1 e2 a.
   Selective f =>
   f (e1 + a) × f (e2 + (e1 -> a)) × f (e2 -> e1 -> a) -> f a
 associativity1 (x, (y, z)) = x <*? (y <*? z)
-associativity2 (x, (y, z)) = (f <$> x) <*? (g <$> y) <*? (h <$> z)
+associativity2 (x, (y, z)) = (f <$> x) <*? ((\y a -> bimap (,a) ($a) y) <$> y) <*? (h <$> z)
   where
   f = fmap Right
-  g y a = bimap (,a) ($a) y
   h = uncurry

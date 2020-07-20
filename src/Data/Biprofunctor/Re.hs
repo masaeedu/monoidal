@@ -3,7 +3,7 @@ module Data.Biprofunctor.Re where
 import Data.Void
 
 import Control.Category.ProductCategory
-import Control.Category.Tensor
+import Control.Category.Tensor.Hask
 
 import Data.Biprofunctor
 import Data.Biprofunctor.Monoidal.Class

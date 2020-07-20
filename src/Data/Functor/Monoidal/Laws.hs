@@ -1,8 +1,7 @@
-{-# LANGUAGE ImpredicativeTypes #-}
 module Data.Functor.Monoidal.Laws where
 
 import Control.Category ((>>>), (<<<))
-import Control.Category.Tensor
+import Control.Category.Tensor.Hask
 import Control.Category.Iso
 
 import Data.Functor.Monoidal.Class

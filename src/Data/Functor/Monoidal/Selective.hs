@@ -4,7 +4,7 @@ module Data.Functor.Monoidal.Selective where
 import Prelude hiding (Applicative(..), zip)
 
 import Control.Applicative (ZipList(..))
-import Control.Category.Tensor
+import Control.Category.Tensor.Hask
 
 import Data.Functor.Monoidal.Class
 import Data.Functor.Monoidal.Applicative
@@ -12,7 +12,7 @@ import Data.Functor.Monoidal.Decisive
 
 import Data.Bifunctor.Tannen
 
-flipTannen :: (Functor f, Symmetric t, Arrow t ~ (->)) => Tannen f t a b -> Tannen f t b a
+flipTannen :: (Functor f, Symmetric t) => Tannen f t a b -> Tannen f t b a
 flipTannen (Tannen t) = Tannen $ fmap symm $ t
 
 liftTannen :: Functor f => f a -> Tannen f (+) x a

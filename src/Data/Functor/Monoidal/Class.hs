@@ -4,7 +4,7 @@ module Data.Functor.Monoidal.Class where
 import Prelude hiding (Applicative(..))
 
 import Control.Category.Iso
-import Control.Category.Tensor
+import Control.Category.Tensor.Hask
 import Control.Category ((>>>), (<<<))
 
 import Data.Bifunctor.Tannen
@@ -17,8 +17,6 @@ import Data.Functor.Strong.Class
 class
   ( Associative i
   , Associative o
-  , Arrow i ~ (->)
-  , Arrow o ~ (->)
   , Functor f
   ) =>
   Semigroupal i o f
@@ -33,8 +31,6 @@ infixr -?-
 class
   ( Associative i
   , Associative o
-  , Arrow i ~ (->)
-  , Arrow o ~ (->)
   , Functor f
   ) =>
   OpSemigroupal i o f
@@ -96,33 +92,25 @@ type Select f = (Functor f, forall a. Apply (Tannen f (+) a))
 type Selective f = (Applicative f, Select f)
 
 instance
-  ( Associative t
-  , Arrow t ~ (->)
-  ) =>
+  Associative t =>
   Semigroupal t t Identity
   where
   combineF = Identity . bimap runIdentity runIdentity
 
 instance
-  ( Tensor t
-  , Arrow t ~ (->)
-  ) =>
+  Tensor t =>
   Monoidal t t Identity
   where
   unitF = Identity
 
 instance
-  ( Associative t
-  , Arrow t ~ (->)
-  ) =>
+  Associative t =>
   OpSemigroupal t t Identity
   where
   uncombineF = bimap Identity Identity . runIdentity
 
 instance
-  ( Tensor t
-  , Arrow t ~ (->)
-  ) =>
+  Tensor t =>
   OpMonoidal t t Identity
   where
   discardF = runIdentity

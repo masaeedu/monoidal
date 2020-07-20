@@ -14,7 +14,6 @@ import Data.Functor.Monoidal.Class
 associative :: forall t a.
   ( Testable a
   , Testable2 t
-  , Arrow t ~ (->)
   , Associative t
   , Semigroupal t (×) Gen
   ) =>
@@ -38,7 +37,6 @@ unital :: forall t a.
   ( Testable a
   , Testable (Unit t)
   , Testable2 t
-  , Arrow t ~ (->)
   , Unital t
   , Monoidal t (×) Gen
   ) =>

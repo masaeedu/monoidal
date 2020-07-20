@@ -5,7 +5,7 @@ import qualified Data.Profunctor as P
 
 import Data.Profunctor.ProcomposeVia
 
-import Control.Category.Tensor
+import Control.Category.Tensor.Hask
 
 -- The basic idea of strength is taken from http://www.cse.chalmers.se/~rjmh/Papers/arrows.pdf
 -- We think about the bicategory Prof, in which 0-cells are categories, a 1-cell `C -|-> D` is
@@ -23,8 +23,6 @@ class
   ( Profunctor p
   , Tensor l
   , Tensor r
-  , Arrow l ~ (->)
-  , Arrow r ~ (->)
   ) =>
   LStrong l r p
   where
@@ -34,8 +32,6 @@ class
   ( Profunctor p
   , Tensor l
   , Tensor r
-  , Arrow l ~ (->)
-  , Arrow r ~ (->)
   ) =>
   RStrong l r p
   where
@@ -62,17 +58,13 @@ instance {-# OVERLAPPABLE #-} P.Choice p => RStrong (+) (+) p
 -- The hom-profunctor functions as the identity 1-cell in the
 -- bicategory Prof
 instance
-  ( Tensor i
-  , Arrow i ~ (->)
-  ) =>
+  Tensor i =>
   LStrong i i (->)
   where
   lstrength = first
 
 instance
-  ( Tensor i
-  , Arrow i ~ (->)
-  ) =>
+  Tensor i =>
   RStrong i i (->)
   where
   rstrength = second

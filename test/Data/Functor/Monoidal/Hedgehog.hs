@@ -1,6 +1,6 @@
 module Data.Functor.Monoidal.Hedgehog where
 
-import Control.Category.Tensor
+import Control.Category.Tensor.Hask
 
 import Data.Functor.Monoidal.Class
 import Data.Functor.Monoidal.Laws
