@@ -68,14 +68,10 @@ runitbwdid1, runitbwdid2 :: forall t a p i.
 runitbwdid1 = bwdid1 (runit @t)
 runitbwdid2 = bwdid2 (runit @t)
 
-type Entails2 c t = (forall x y. (c x, c y) => c (t x y) :: Constraint)
-
 pentagon1, pentagon2 ::
   ( Arrow t ~ p
   , Associative t
   , Ask t a, Ask t b, Ask t c, Ask t d
-  , Ask t ~ ob
-  , (forall x y. (ob x, ob y) => ob (t x y))
   ) =>
   (a `t` (b `t` (c `t` d))) `p` (a `t` b `t` c `t` d)
 pentagon1 = bwd assoc >>> bwd assoc
@@ -86,8 +82,6 @@ triangle1, triangle2 ::
   , Unit t ~ i
   , Tensor t
   , Ask t a, Ask t b
-  , Ask t ~ ob
-  , (forall x y. (ob x, ob y) => ob (t x y))
   ) =>
   (a `t` (i `t` b)) `p` (a `t` b)
 triangle1 = bimap id (fwd lunit)
