@@ -39,6 +39,28 @@ class
 
 type Strong l r p = (LStrong l r p, RStrong l r p)
 
+-- TODO: Figure out the categorical meaning for these ones, haven't been able to reconcile
+-- this with what happens in Cat with strength in opposite 2-category
+class
+  ( Profunctor p
+  , Tensor l
+  , Tensor r
+  ) =>
+  OpRStrong l r p
+  where
+  oprstrength :: p (l x a) (r x b) -> p a b
+
+class
+  ( Profunctor p
+  , Tensor l
+  , Tensor r
+  ) =>
+  OpLStrong l r p
+  where
+  oplstrength :: p (l a x) (r b x) -> p a b
+
+type OpStrong l r p = (OpLStrong l r p, OpRStrong l r p)
+
 instance {-# OVERLAPPABLE #-} P.Strong p => LStrong (×) (×) p
   where
   lstrength = P.first'

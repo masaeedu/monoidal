@@ -3,6 +3,8 @@ module Control.Category.Tensor.Hask
   , module T'
   ) where
 
+import Data.Void
+
 import Control.Category.Tensor as T'
   hiding
   ( Structure
@@ -47,3 +49,15 @@ type OpLaxRAnnihil t1 t2 = (OnHask t1, OnHask t2, T.OpLaxRAnnihil t1 t2)
 type LRig          t1 t2 = (OnHask t1, OnHask t2, T.LRig t1 t2)
 type RRig          t1 t2 = (OnHask t1, OnHask t2, T.RRig t1 t2)
 type Rig           t1 t2 = (OnHask t1, OnHask t2, T.Rig t1 t2)
+
+dup :: a -> a × a
+dup a = (a, a)
+
+discard :: a -> ()
+discard = const ()
+
+merge :: a + a -> a
+merge = either id id
+
+introduce :: Void -> a
+introduce = absurd

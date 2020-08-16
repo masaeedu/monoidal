@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 4c8535c8de7e8177827b5ca64dbfa68edd9012b9efa3db374cd1cfb6ad98f426
+-- hash: 6c27b3a86030d6d1bd4a58065c4ec0934810a5bde493c746147d1322793d6c12
 
 name:           monoidal
 version:        0.0.0
@@ -22,8 +22,9 @@ library
       Control.Category.Tensor.Hask
       Control.Category.Tensor.Laws
       Data.Biprofunctor
+      Data.Biprofunctor.Downstream
       Data.Biprofunctor.Monoidal.Class
-      Data.Biprofunctor.Re
+      Data.Biprofunctor.Upstream
       Data.Functor.ComposeVia
       Data.Functor.Monoidal.Alignable
       Data.Functor.Monoidal.Alternative
@@ -70,8 +71,9 @@ test-suite monoidal-test
       Control.Category.Tensor.Hask
       Control.Category.Tensor.Laws
       Data.Biprofunctor
+      Data.Biprofunctor.Downstream
       Data.Biprofunctor.Monoidal.Class
-      Data.Biprofunctor.Re
+      Data.Biprofunctor.Upstream
       Data.Functor.ComposeVia
       Data.Functor.Monoidal.Alignable
       Data.Functor.Monoidal.Alternative
