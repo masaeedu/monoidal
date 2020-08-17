@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 6c27b3a86030d6d1bd4a58065c4ec0934810a5bde493c746147d1322793d6c12
+-- hash: 1aa1e51d6967d5c7f23c404eaa6c37a28acb03bd9c6a482c1495140b34efca2a
 
 name:           monoidal
 version:        0.0.0
@@ -53,10 +53,7 @@ library
   build-depends:
       base >=4.13 && <4.14
     , bifunctors
-    , hedgehog
     , profunctors
-    , tasty
-    , tasty-hedgehog
     , these
   default-language: Haskell2010
 
@@ -64,35 +61,6 @@ test-suite monoidal-test
   type: exitcode-stdio-1.0
   main-is: Main.hs
   other-modules:
-      Control.Category.Iso
-      Control.Category.Iso.Laws
-      Control.Category.ProductCategory
-      Control.Category.Tensor
-      Control.Category.Tensor.Hask
-      Control.Category.Tensor.Laws
-      Data.Biprofunctor
-      Data.Biprofunctor.Downstream
-      Data.Biprofunctor.Monoidal.Class
-      Data.Biprofunctor.Upstream
-      Data.Functor.ComposeVia
-      Data.Functor.Monoidal.Alignable
-      Data.Functor.Monoidal.Alternative
-      Data.Functor.Monoidal.Applicative
-      Data.Functor.Monoidal.Class
-      Data.Functor.Monoidal.Decisive
-      Data.Functor.Monoidal.Filterable
-      Data.Functor.Monoidal.Grid
-      Data.Functor.Monoidal.Laws
-      Data.Functor.Monoidal.Selective
-      Data.Functor.Monoidal.Selective.Laws
-      Data.Functor.Strong.Class
-      Data.Profunctor.Monoidal.Class
-      Data.Profunctor.Monoidal.Demux
-      Data.Profunctor.Monoidal.Mux
-      Data.Profunctor.Monoidal.Splice
-      Data.Profunctor.Monoidal.Switch
-      Data.Profunctor.ProcomposeVia
-      Data.Profunctor.Strong.Class
       Control.Category.Tensor.Test
       Data.Functor.Monoidal.Hedgehog
       Data.Functor.Monoidal.Selective.Test
@@ -100,7 +68,6 @@ test-suite monoidal-test
       Hedgehog.Extra
       Paths_monoidal
   hs-source-dirs:
-      src
       test
   default-extensions: GADTs StandaloneDeriving DeriveFunctor DerivingVia GeneralizedNewtypeDeriving ScopedTypeVariables RankNTypes QuantifiedConstraints TypeApplications TypeOperators MultiParamTypeClasses ConstraintKinds DataKinds PolyKinds KindSignatures UndecidableInstances UndecidableSuperClasses FlexibleInstances FlexibleContexts DefaultSignatures TypeFamilies TypeFamilyDependencies AllowAmbiguousTypes
   ghc-options: -Wall -Wno-orphans -fprint-potential-instances

@@ -6,16 +6,6 @@ license: MIT
 
 build-type: Simple
 
-source-dirs: src
-dependencies:
-  - { name: "base", version: ">=4.13 && <4.14" }
-  - bifunctors
-  - profunctors
-  - these
-  - hedgehog
-  - tasty
-  - tasty-hedgehog
-
 ghc-options: [-Wall, -Wno-orphans, -fprint-potential-instances]
 default-extensions:
   - GADTs
@@ -49,10 +39,21 @@ default-extensions:
 
   - AllowAmbiguousTypes
 
-library: {}
+dependencies:
+  - { name: "base", version: ">=4.13 && <4.14" }
+  - bifunctors
+  - profunctors
+  - these
+
+library:
+  source-dirs: src
+
 tests:
   monoidal-test:
     main: Main.hs
     source-dirs: test
     dependencies:
       - monoidal
+      - hedgehog
+      - tasty
+      - tasty-hedgehog
