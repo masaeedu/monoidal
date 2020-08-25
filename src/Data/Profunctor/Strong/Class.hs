@@ -61,19 +61,19 @@ class
 
 type OpStrong l r p = (OpLStrong l r p, OpRStrong l r p)
 
-instance {-# OVERLAPPABLE #-} P.Strong p => LStrong (×) (×) p
+instance {-# INCOHERENT #-} P.Strong p => LStrong (×) (×) p
   where
   lstrength = P.first'
 
-instance {-# OVERLAPPABLE #-} P.Strong p => RStrong (×) (×) p
+instance {-# INCOHERENT #-} P.Strong p => RStrong (×) (×) p
   where
   rstrength = P.second'
 
-instance {-# OVERLAPPABLE #-} P.Choice p => LStrong (+) (+) p
+instance {-# INCOHERENT #-} P.Choice p => LStrong (+) (+) p
   where
   lstrength = P.left'
 
-instance {-# OVERLAPPABLE #-} P.Choice p => RStrong (+) (+) p
+instance {-# INCOHERENT #-} P.Choice p => RStrong (+) (+) p
   where
   rstrength = P.right'
 
