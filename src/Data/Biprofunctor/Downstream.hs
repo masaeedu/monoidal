@@ -1,6 +1,6 @@
 module Data.Biprofunctor.Downstream where
 
-import Control.Category.ProductCategory
+import Control.Category.Product
 import Control.Category.Tensor.Hask
 
 import Data.Biprofunctor

@@ -1,4 +1,4 @@
-module Control.Category.ProductCategory where
+module Control.Category.Product where
 
 -- Haskell's support for type level currying and uncurrying sucks,
 -- so using type level tuples and the regular Category typeclass doesn't
