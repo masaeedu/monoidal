@@ -1,8 +1,12 @@
 {-# LANGUAGE TupleSections #-}
-module Control.Category.Tensor where
+module Control.Category.Tensor
+  ( module Control.Category.Tensor
+  , module Data.Subtypes
+  ) where
 
 import Prelude hiding ((.), id)
 
+import Data.Subtypes
 import qualified Data.Bifunctor as B
 import Data.Void
 import Data.These
@@ -22,22 +26,19 @@ infixr 7 ×
 
 -- {{{ CLASSES
 
-class NoThanks a
-instance NoThanks a
-
-class ob (t x y) => Wat ob t x y
-instance ob (t x y) => Wat ob t x y
+class ob (t x y) => Apply2 ob t x y
+instance ob (t x y) => Apply2 ob t x y
 
 class
   ( Category (Arrow t)
-  , forall ob x y. (Ask t ~ ob, ob x, ob y) => Wat ob t x y
+  , forall ob x y. (Ask t ~ ob, ob x, ob y) => Apply2 ob t x y
   ) => Structure (t :: k -> k -> k)
   where
 
   type Arrow t :: k -> k -> *
 
   type Ask t :: k -> Constraint
-  type Ask t = NoThanks
+  type Ask t = Trivial
 
   bimap :: (Ask t a, Ask t b, Ask t c, Ask t d) => Arrow t a b -> Arrow t c d -> Arrow t (t a c) (t b d)
 
@@ -286,28 +287,5 @@ instance
   OpLaxRAnnihil times (+)
   where
   oprnihil = absurd
-
-{-
--- The cocartesian monoidal structure distributes laxly over any bifunctor with a tensorial strength wrt Either
-class Wat t
-  where
-  wat :: Either a (t x y) -> t (Either a x) (Either a y)
-
-instance Wat (,)
-  where
-  wat = either (Left &&& Left) (bimap Right Right)
-
-instance Wat Either
-  where
-  wat = either (Left . Left) (bimap Right Right)
-
-instance
-  ( Bistructure (+) plus
-  , Wat plus
-  ) =>
-  LaxLDistrib (+) plus
-  where
-  ldistrib = either (wat . Left) (bimap Right Right)
--}
 
 -- }}}

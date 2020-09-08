@@ -28,7 +28,7 @@ import Control.Category.Tensor as T'
   )
 import qualified Control.Category.Tensor as T
 
-type OnHask        t = (Arrow t ~ (->), Ask t ~ NoThanks)
+type OnHask        t = (Arrow t ~ (->), Ask t ~ Trivial)
 
 type Structure   t = (OnHask t, T.Structure t)
 type Associative t = (OnHask t, T.Associative t)

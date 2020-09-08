@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 1aa1e51d6967d5c7f23c404eaa6c37a28acb03bd9c6a482c1495140b34efca2a
+-- hash: 0cb418d75ea3a360ac654548099d880575ef646726f8da503f978dfa17411c05
 
 name:           monoidal
 version:        0.0.0
@@ -44,6 +44,7 @@ library
       Data.Profunctor.Monoidal.Switch
       Data.Profunctor.ProcomposeVia
       Data.Profunctor.Strong.Class
+      Data.Subtypes
   other-modules:
       Paths_monoidal
   hs-source-dirs:
