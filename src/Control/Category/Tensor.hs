@@ -26,12 +26,9 @@ infixr 7 ×
 
 -- {{{ CLASSES
 
-class ob (t x y) => Apply2 ob t x y
-instance ob (t x y) => Apply2 ob t x y
-
 class
   ( Category (Arrow t)
-  , forall ob x y. (Ask t ~ ob, ob x, ob y) => Apply2 ob t x y
+  , forall ob x y. (Ask t ~ ob, x <: ob, y <: ob) => t x y <: ob
   ) => Structure (t :: k -> k -> k)
   where
 
