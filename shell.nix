@@ -2,7 +2,7 @@ let
   sources = import ./nix/sources.nix;
   compilerVersion = "ghc883";
   hnix = import sources.iohk-hnix {};
-  pkgs = (import hnix.sources.nixpkgs) hnix.nixpkgsArgs;
+  pkgs = (import hnix.sources.nixpkgs-2003) hnix.nixpkgsArgs;
 in
 (import ./.).shellFor {
   withHoogle = true;
