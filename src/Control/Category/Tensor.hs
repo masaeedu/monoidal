@@ -6,19 +6,20 @@ module Control.Category.Tensor
 
 import Prelude hiding ((.), id)
 
-import Data.Subtypes
+import Data.Subtypes (type (<:), Impossible, Trivial)
 import qualified Data.Bifunctor as B
-import Data.Void
-import Data.These
-import Data.These.Combinators
+import Data.Void (absurd, Void)
+import Data.These (these, These(This, That))
+import Data.These.Combinators (assocThese, swapThese, unassocThese)
 
-import Control.Category
-import Control.Category.Iso
+import Control.Category (Category(..))
+import Control.Category.Iso (Iso(..))
 
-import Unsafe.Coerce
-import Data.Type.Equality
+import Unsafe.Coerce (unsafeCoerce)
+import Data.Type.Equality (type (:~:)(..))
 
-import GHC.Exts
+import GHC.Exts (Constraint)
+import Data.Coerce (coerce)
 
 type (×) = (,)
 type (+) = Either
