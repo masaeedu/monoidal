@@ -1,4 +1,4 @@
-{-# LANGUAGE TupleSections #-}
+{-# LANGUAGE TupleSections, InstanceSigs #-}
 module Control.Category.Tensor
   ( module Control.Category.Tensor
   , module Data.Subtypes
@@ -15,6 +15,9 @@ import Data.These.Combinators
 import Control.Category
 import Control.Category.Iso
 
+import Unsafe.Coerce
+import Data.Type.Equality
+
 import GHC.Exts
 
 type (×) = (,)
@@ -24,20 +27,78 @@ type (⊠) = These
 infixr 6 +
 infixr 7 ×
 
--- {{{ CLASSES
+-- {{{ CONSTRAINED CATEGORIES
+
+class Category p => SubCat (p :: k -> k -> *)
+  where
+  type Ob p :: k -> Constraint
+  type Ob p = Trivial
+
+instance SubCat (->)
+
+-- }}}
+
+-- {{{ GENERALIZED FUNCTORS
+
+class (SubCat p, SubCat q, forall oq x. (oq ~ Ob q, Ob p x) => oq (f x)) => GFunctor p q f
+  where
+  gfmap :: (Ob p a, Ob p b) => p a b -> q (f a) (f b)
+
+-- }}}
+
+-- {{{ PRODUCT CATEGORIES
+
+data BiArrow (p :: k -> k -> *) (q :: l -> l -> *) (ab :: (k, l)) (cd :: (k, l)) :: *
+  where
+  BiArrow :: p a b -> q c d -> BiArrow p q '(a, c) '(b, d)
+
+type family Fst (ab :: (x, y)) :: x
+  where
+  Fst '(a, _) = a
+
+type family Snd (ab :: (x, y)) :: y
+  where
+  Snd '(_, b) = b
+
+-- We need to postulate this because this is not a given in Haskell's kind system
+-- Near as I can figure out this is because of non-totality (i.e. you can make up type families with codomain of kind (a, b))
+tuplePostulate :: ab :~: '(Fst ab, Snd ab)
+tuplePostulate = unsafeCoerce Refl
+
+instance (Category p, Category q) => Category (BiArrow p q)
+  where
+  id :: forall ab. BiArrow p q ab ab
+  id = case tuplePostulate @ab of Refl -> BiArrow id id
+
+  BiArrow f g . BiArrow h i = BiArrow (f . h) (g . i)
+
+class (f (Fst ab), g (Snd ab)) => Both (f :: k -> Constraint) (g :: l -> Constraint) (ab :: (k, l))
+instance (f (Fst ab), g (Snd ab)) => Both f g ab
+
+instance (SubCat p, SubCat q) => SubCat (BiArrow p q)
+  where
+  type Ob (BiArrow p q) = Both (Ob p) (Ob q)
+
+-- }}}
+
+-- {{{ TENSOR CLASSES
 
 class
-  ( Category (Arrow t)
+  ( GFunctor (BiArrow (Arrow t) (Arrow t)) (Arrow t) (Uncurry t)
   , forall ob x y. (Ask t ~ ob, x <: ob, y <: ob) => t x y <: ob
-  ) => Structure (t :: k -> k -> k)
+  ) =>
+  Structure (t :: k -> k -> k)
   where
-
   type Arrow t :: k -> k -> *
+  type Uncurry t :: (k, k) -> k
 
-  type Ask t :: k -> Constraint
-  type Ask t = Trivial
+  uncurryTensor :: Arrow t (t a b) (Uncurry t '(a, b))
+  curryTensor :: Arrow t (Uncurry t '(a, b)) (t a b)
 
-  bimap :: (Ask t a, Ask t b, Ask t c, Ask t d) => Arrow t a b -> Arrow t c d -> Arrow t (t a c) (t b d)
+type Ask t = Ob (Arrow t)
+
+bimap :: (Structure t, Ob (Arrow t) a, Ob (Arrow t) b, Ob (Arrow t) c, Ob (Arrow t) d) => Arrow t a b -> Arrow t c d -> Arrow t (t a c) (t b d)
+bimap f g = curryTensor . gfmap (BiArrow f g) . uncurryTensor
 
 first :: (Structure t, Ask t a, Ask t b, Ask t x) => Arrow t a b -> Arrow t (t a x) (t b x)
 first = flip bimap id
@@ -128,20 +189,20 @@ type Rig times plus = (LRig times plus, RRig times plus)
 
 -- {{{ STRUCTURE
 
-instance Structure (×)
+newtype Uncurry0 (t :: a -> b -> *) (ab :: (a, b))
   where
-  type Arrow (×) = (->)
-  bimap = B.bimap
+  Uncurry0 :: { runUncurry0 :: t (Fst ab) (Snd ab) } -> Uncurry0 t ab
 
-instance Structure (+)
+instance B.Bifunctor t => GFunctor (BiArrow (->) (->)) (->) (Uncurry0 t)
   where
-  type Arrow (+) = (->)
-  bimap = B.bimap
+  gfmap (BiArrow f g) = Uncurry0 . B.bimap f g . runUncurry0
 
-instance Structure (⊠)
+instance B.Bifunctor t => Structure t
   where
-  type Arrow (⊠) = (->)
-  bimap = B.bimap
+  type Arrow t = (->)
+  type Uncurry t = Uncurry0 t
+  uncurryTensor = coerce
+  curryTensor = coerce
 
 -- }}}
 

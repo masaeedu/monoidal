@@ -2,6 +2,8 @@ module Data.Functor.ComposeVia where
 
 import Prelude hiding (id, (.))
 
+import Data.Coerce
+
 import Control.Category
 import Control.Category.Tensor
 import Control.Category.Iso
@@ -15,19 +17,33 @@ newtype ComposeVia m f g a = ComposeVia { getComposeVia :: f (g a) }
 deriving via (Compose (f :: * -> *) (g :: * -> *))
   instance (Functor f, Functor g) => Functor (ComposeVia m f g)
 
-newtype f ~> g = Nat { runNat :: forall x. f x -> g x }
+newtype (f :: * -> *) ~> (g :: * -> *) = Nat { runNat :: forall x. f x -> g x }
 
 instance Category (~>)
   where
   id = Nat $ id
   Nat f . Nat g = Nat $ f . g
 
+instance SubCat (~>)
+  where
+  type Ob (~>) = Functor
+
+newtype Uncurry1 (t :: x -> y -> k -> *) :: (x, y) -> k -> *
+  where
+  Uncurry1 :: { runUncurry1 :: t (Fst ab) (Snd ab) v } -> Uncurry1 t ab v
+
+deriving instance (Functor (Fst fg), Functor (Snd fg)) => Functor (Uncurry1 (ComposeVia m) fg)
+
+instance GFunctor (BiArrow (~>) (~>)) (~>) (Uncurry1 (ComposeVia m))
+  where
+  gfmap (BiArrow (Nat f) (Nat g)) = Nat $ Uncurry1 . (\(ComposeVia fga) -> ComposeVia $ f $ fmap g fga) . runUncurry1
+
 instance Structure (ComposeVia m)
   where
   type Arrow (ComposeVia m) = (~>)
-  type Ask (ComposeVia m) = Functor
-
-  bimap (Nat f) (Nat g) = Nat $ \(ComposeVia v) -> ComposeVia $ f $ fmap g $ v
+  type Uncurry (ComposeVia m) = Uncurry1 (ComposeVia m)
+  uncurryTensor = Nat $ coerce
+  curryTensor = Nat $ coerce
 
 instance Associative (ComposeVia m)
   where

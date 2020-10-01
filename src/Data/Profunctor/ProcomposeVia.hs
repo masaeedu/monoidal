@@ -2,6 +2,8 @@ module Data.Profunctor.ProcomposeVia where
 
 import Prelude hiding (id, (.))
 
+import Data.Coerce
+
 import Data.Profunctor
 
 import Control.Category
@@ -16,18 +18,33 @@ instance (Profunctor p, Profunctor q) => Profunctor (ProcomposeVia m p q)
   where
   dimap f g (ProcomposeVia a b) = ProcomposeVia (rmap g a) (lmap f b)
 
-newtype p ~~> q = Nat2 { runDinat :: forall a b. p a b -> q a b }
+newtype (p :: * -> * -> *) ~~> (q :: * -> * -> *) = Nat2 { runDinat :: forall a b. p a b -> q a b }
 
 instance Category (~~>)
   where
   id = Nat2 id
   Nat2 f . Nat2 g = Nat2 $ f . g
 
-instance Structure (ProcomposeVia m :: (* -> * -> *) -> (* -> * -> *) -> * -> * -> *)
+instance SubCat (~~>)
+  where
+  type Ob (~~>) = Profunctor
+
+newtype Uncurry2 (t :: x -> y -> k -> l -> *) :: (x, y) -> k -> l -> *
+  where
+  Uncurry2 :: { runUncurry2 :: pc (Fst pq) (Snd pq) a b } -> Uncurry2 pc pq a b
+
+deriving instance (Profunctor (Fst x), Profunctor (Snd x)) => Profunctor (Uncurry2 (ProcomposeVia m) x)
+
+instance GFunctor (BiArrow (~~>) (~~>)) (~~>) (Uncurry2 (ProcomposeVia m))
+  where
+  gfmap (BiArrow (Nat2 f) (Nat2 g)) = Nat2 $ Uncurry2 . (\(ProcomposeVia a b) -> ProcomposeVia (f a) (g b)) . runUncurry2
+
+instance Structure (ProcomposeVia m)
   where
   type Arrow (ProcomposeVia m) = (~~>)
-  type Ask (ProcomposeVia m) = Profunctor
-  bimap (Nat2 f) (Nat2 g) = Nat2 $ \(ProcomposeVia a b) -> ProcomposeVia (f a) (g b)
+  type Uncurry (ProcomposeVia m) = Uncurry2 (ProcomposeVia m)
+  uncurryTensor = Nat2 coerce
+  curryTensor = Nat2 coerce
 
 instance Associative (ProcomposeVia m)
   where
