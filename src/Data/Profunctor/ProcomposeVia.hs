@@ -29,7 +29,7 @@ instance SubCat (~~>)
   where
   type Ob (~~>) = Profunctor
 
-newtype Uncurry2 (t :: x -> y -> k -> l -> *) :: (x, y) -> k -> l -> *
+newtype Uncurry2 :: (a -> b -> c -> d -> *) -> (a, b) -> c -> d -> *
   where
   Uncurry2 :: { runUncurry2 :: pc (Fst pq) (Snd pq) a b } -> Uncurry2 pc pq a b
 

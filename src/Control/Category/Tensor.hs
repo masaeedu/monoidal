@@ -189,7 +189,7 @@ type Rig times plus = (LRig times plus, RRig times plus)
 
 -- {{{ STRUCTURE
 
-newtype Uncurry0 (t :: a -> b -> *) (ab :: (a, b))
+newtype Uncurry0 :: (a -> b -> *) -> (a, b) -> *
   where
   Uncurry0 :: { runUncurry0 :: t (Fst ab) (Snd ab) } -> Uncurry0 t ab
 

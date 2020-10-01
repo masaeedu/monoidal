@@ -28,9 +28,9 @@ instance SubCat (~>)
   where
   type Ob (~>) = Functor
 
-newtype Uncurry1 (t :: x -> y -> k -> *) :: (x, y) -> k -> *
+newtype Uncurry1 :: (a -> b -> c -> *) -> (a, b) -> c -> *
   where
-  Uncurry1 :: { runUncurry1 :: t (Fst ab) (Snd ab) v } -> Uncurry1 t ab v
+  Uncurry1 :: { runUncurry1 :: t (Fst ab) (Snd ab) c } -> Uncurry1 t ab c
 
 deriving instance (Functor (Fst fg), Functor (Snd fg)) => Functor (Uncurry1 (ComposeVia m) fg)
 
