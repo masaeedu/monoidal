@@ -6,7 +6,7 @@ license: MIT
 
 build-type: Simple
 
-ghc-options: [-Wall, -Wno-orphans, -fprint-potential-instances]
+ghc-options: [-Wall, -Wno-orphans, -fprint-potential-instances, -fno-show-valid-hole-fits]
 default-extensions:
   - GADTs
 
@@ -33,6 +33,7 @@ default-extensions:
   - FlexibleInstances
   - FlexibleContexts
   - DefaultSignatures
+  - InstanceSigs
 
   - TypeFamilies
   - TypeFamilyDependencies

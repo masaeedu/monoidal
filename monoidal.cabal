@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.31.2.
+-- This file has been generated from package.yaml by hpack version 0.34.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0cb418d75ea3a360ac654548099d880575ef646726f8da503f978dfa17411c05
+-- hash: 6559e0befcddb4342f35e5d9cf630f29b0f69a7a2a7fff39a0fc234bc803f3d5
 
 name:           monoidal
 version:        0.0.0
@@ -18,9 +18,16 @@ library
       Control.Category.Iso
       Control.Category.Iso.Laws
       Control.Category.Product
+      Control.Category.Sub
+      Control.Category.Sub.Bifunctor
+      Control.Category.Sub.Category
+      Control.Category.Sub.Endofunctor
+      Control.Category.Sub.Functor
+      Control.Category.Sub.Nat
       Control.Category.Tensor
       Control.Category.Tensor.Hask
       Control.Category.Tensor.Laws
+      Control.Category.Uncurry
       Data.Biprofunctor
       Data.Biprofunctor.Downstream
       Data.Biprofunctor.Monoidal.Class
@@ -49,8 +56,8 @@ library
       Paths_monoidal
   hs-source-dirs:
       src
-  default-extensions: GADTs StandaloneDeriving DeriveFunctor DerivingVia GeneralizedNewtypeDeriving ScopedTypeVariables RankNTypes QuantifiedConstraints TypeApplications TypeOperators MultiParamTypeClasses ConstraintKinds DataKinds PolyKinds KindSignatures UndecidableInstances UndecidableSuperClasses FlexibleInstances FlexibleContexts DefaultSignatures TypeFamilies TypeFamilyDependencies AllowAmbiguousTypes
-  ghc-options: -Wall -Wno-orphans -fprint-potential-instances
+  default-extensions: GADTs StandaloneDeriving DeriveFunctor DerivingVia GeneralizedNewtypeDeriving ScopedTypeVariables RankNTypes QuantifiedConstraints TypeApplications TypeOperators MultiParamTypeClasses ConstraintKinds DataKinds PolyKinds KindSignatures UndecidableInstances UndecidableSuperClasses FlexibleInstances FlexibleContexts DefaultSignatures InstanceSigs TypeFamilies TypeFamilyDependencies AllowAmbiguousTypes
+  ghc-options: -Wall -Wno-orphans -fprint-potential-instances -fno-show-valid-hole-fits
   build-depends:
       base >=4.13 && <4.14
     , bifunctors
@@ -70,8 +77,8 @@ test-suite monoidal-test
       Paths_monoidal
   hs-source-dirs:
       test
-  default-extensions: GADTs StandaloneDeriving DeriveFunctor DerivingVia GeneralizedNewtypeDeriving ScopedTypeVariables RankNTypes QuantifiedConstraints TypeApplications TypeOperators MultiParamTypeClasses ConstraintKinds DataKinds PolyKinds KindSignatures UndecidableInstances UndecidableSuperClasses FlexibleInstances FlexibleContexts DefaultSignatures TypeFamilies TypeFamilyDependencies AllowAmbiguousTypes
-  ghc-options: -Wall -Wno-orphans -fprint-potential-instances
+  default-extensions: GADTs StandaloneDeriving DeriveFunctor DerivingVia GeneralizedNewtypeDeriving ScopedTypeVariables RankNTypes QuantifiedConstraints TypeApplications TypeOperators MultiParamTypeClasses ConstraintKinds DataKinds PolyKinds KindSignatures UndecidableInstances UndecidableSuperClasses FlexibleInstances FlexibleContexts DefaultSignatures InstanceSigs TypeFamilies TypeFamilyDependencies AllowAmbiguousTypes
+  ghc-options: -Wall -Wno-orphans -fprint-potential-instances -fno-show-valid-hole-fits
   build-depends:
       base >=4.13 && <4.14
     , bifunctors

@@ -7,6 +7,7 @@ import Control.Category
 import Control.Category.Tensor
 import Control.Category.Iso
 import Control.Category.Iso.Laws
+import Control.Category.Sub.Bifunctor
 
 assocfwdid1, assocfwdid2 ::
   ( Arrow t ~ p

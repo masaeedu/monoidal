@@ -1,11 +1,12 @@
 {-# LANGUAGE ImpredicativeTypes #-}
 module Data.Functor.Monoidal.Class where
 
-import Prelude hiding (Applicative(..))
+import Prelude hiding (Applicative(..), fmap)
 
 import Control.Category.Iso
 import Control.Category.Tensor.Hask
 import Control.Category ((>>>), (<<<))
+import Control.Category.Sub
 
 import Data.Bifunctor.Tannen
 

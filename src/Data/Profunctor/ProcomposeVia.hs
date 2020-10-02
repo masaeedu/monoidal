@@ -9,6 +9,8 @@ import Data.Profunctor
 import Control.Category
 import Control.Category.Iso
 import Control.Category.Tensor
+import Control.Category.Sub
+import Control.Category.Product
 
 data ProcomposeVia m :: (* -> * -> *) -> (* -> * -> *) -> * -> * -> *
   where
@@ -39,12 +41,15 @@ instance GFunctor (BiArrow (~~>) (~~>)) (~~>) (Uncurry2 (ProcomposeVia m))
   where
   gfmap (BiArrow (Nat2 f) (Nat2 g)) = Nat2 $ Uncurry2 . (\(ProcomposeVia a b) -> ProcomposeVia (f a) (g b)) . runUncurry2
 
+instance GBifunctor (~~>) (ProcomposeVia m)
+  where
+  type Uncurry (ProcomposeVia m) = Uncurry2 (ProcomposeVia m)
+  uncurryB = Nat2 coerce
+  curryB = Nat2 coerce
+
 instance Structure (ProcomposeVia m)
   where
   type Arrow (ProcomposeVia m) = (~~>)
-  type Uncurry (ProcomposeVia m) = Uncurry2 (ProcomposeVia m)
-  uncurryTensor = Nat2 coerce
-  curryTensor = Nat2 coerce
 
 instance Associative (ProcomposeVia m)
   where

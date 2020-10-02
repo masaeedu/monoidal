@@ -1,12 +1,15 @@
 module Data.Functor.ComposeVia where
 
-import Prelude hiding (id, (.))
+import Prelude hiding (id, (.), fmap)
 
 import Data.Coerce
 
 import Control.Category
 import Control.Category.Tensor
 import Control.Category.Iso
+import Control.Category.Sub
+import Control.Category.Product
+import Control.Category.Uncurry
 
 import Data.Functor.Identity
 import Data.Functor.Compose
@@ -28,22 +31,21 @@ instance SubCat (~>)
   where
   type Ob (~>) = Functor
 
-newtype Uncurry1 :: (a -> b -> c -> *) -> (a, b) -> c -> *
-  where
-  Uncurry1 :: { runUncurry1 :: t (Fst ab) (Snd ab) c } -> Uncurry1 t ab c
-
 deriving instance (Functor (Fst fg), Functor (Snd fg)) => Functor (Uncurry1 (ComposeVia m) fg)
 
 instance GFunctor (BiArrow (~>) (~>)) (~>) (Uncurry1 (ComposeVia m))
   where
   gfmap (BiArrow (Nat f) (Nat g)) = Nat $ Uncurry1 . (\(ComposeVia fga) -> ComposeVia $ f $ fmap g fga) . runUncurry1
 
+instance GBifunctor (~>) (ComposeVia m)
+  where
+  type Uncurry (ComposeVia m) = Uncurry1 (ComposeVia m)
+  uncurryB = Nat $ coerce
+  curryB = Nat $ coerce
+
 instance Structure (ComposeVia m)
   where
   type Arrow (ComposeVia m) = (~>)
-  type Uncurry (ComposeVia m) = Uncurry1 (ComposeVia m)
-  uncurryTensor = Nat $ coerce
-  curryTensor = Nat $ coerce
 
 instance Associative (ComposeVia m)
   where
