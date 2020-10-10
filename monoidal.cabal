@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 6559e0befcddb4342f35e5d9cf630f29b0f69a7a2a7fff39a0fc234bc803f3d5
+-- hash: fd11baa2023a58041612fa709ea7d32941418ae3d8a1d5fe2a4a36a6b17f0700
 
 name:           monoidal
 version:        0.0.0
@@ -24,6 +24,7 @@ library
       Control.Category.Sub.Endofunctor
       Control.Category.Sub.Functor
       Control.Category.Sub.Nat
+      Control.Category.Sub.Op
       Control.Category.Tensor
       Control.Category.Tensor.Hask
       Control.Category.Tensor.Laws
