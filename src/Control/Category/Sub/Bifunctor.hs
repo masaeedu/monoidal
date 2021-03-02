@@ -6,7 +6,7 @@ import Control.Category (Category(..))
 import Control.Category.Sub.Category (SubCat(..))
 import Control.Category.Product (BiArrow(..))
 import Control.Category.Sub.Functor (GFunctor(..))
-import Control.Category.Uncurry
+import Control.Category.Uncurry (Uncurry0(..))
 
 import qualified Data.Bifunctor as B
 
